@@ -13,9 +13,11 @@ export interface Dataseries {
     label: string
     order: number
     unit: string
-    color: string
+    labelColor: string
+    valueColor: string
     averageLatest: number
-    fontSize: string
+    labelFontSize: number
+    valueFontSize: number
     backgroundColor: string
     data: Data[]
     // not input values

@@ -16,9 +16,9 @@ export class WidgetValue extends LitElement {
 
 
   @state()
-  private numberLabels?: NodeListOf<Element>
+  private numberText?: NodeListOf<Element>
   @state()
-  private titleLabels?: NodeListOf<Element>
+  private labelText?: NodeListOf<Element>
 
   resizeObserver: ResizeObserver
 
@@ -28,25 +28,22 @@ export class WidgetValue extends LitElement {
 
       const width: number = ev[0].contentRect.width
       const height: number = ev[0].contentRect.height
-      const modifier = width * 0.08
-      console.log('resize', this.numberLabels, this.titleLabels, modifier)
-      this.numberLabels?.forEach(n => {
-        console.log('value', n.getAttribute('label'))
-
-        n.setAttribute("style", `font-size: ${width*0.06}px;`)
+      const modifier = width * 0.006
+      this.numberText?.forEach(n => {
+        const label: string | null = n.getAttribute('label')
+        const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
+        n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier}px;`)
       })
 
-      this.titleLabels?.forEach(n => {
-          n.setAttribute("style", `font-size: ${width*0.06}px;`)
-        })
+      this.labelText?.forEach(n => {
+        const label: string | null = n.getAttribute('label')
+        const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
+        n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px;`)
+      })
+
+      this.textActive = true
       
     })
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-
-
-
   }
 
   updated(changedProperties: Map<string, any>) {
@@ -64,8 +61,8 @@ export class WidgetValue extends LitElement {
     const sv: Element | undefined | null = this.shadowRoot?.querySelector('.single-value')
     if (sv) this.resizeObserver.observe(sv)
 
-    this.numberLabels = this?.shadowRoot?.querySelectorAll('.current-value')
-    this.titleLabels = this?.shadowRoot?.querySelectorAll('.label')
+    this.numberText = this?.shadowRoot?.querySelectorAll('.current-value')
+    this.labelText = this?.shadowRoot?.querySelectorAll('.label')
 
     this.dataSets = new Map()
     this.inputData.dataseries.forEach(ds => {
@@ -79,8 +76,10 @@ export class WidgetValue extends LitElement {
             order: ds.order,
             unit: ds.unit,
             averageLatest: ds.averageLatest,
-            color: ds.color,
-            fontSize: ds.fontSize,
+            labelColor: ds.labelColor,
+            valueColor: ds.valueColor,
+            labelFontSize: ds.labelFontSize,
+            valueFontSize: ds.valueFontSize,
             backgroundColor: ds.backgroundColor,
             data: ds.data.filter(d => d.pivot === piv)
           }
@@ -122,71 +121,76 @@ export class WidgetValue extends LitElement {
       height: 100%;
       width: 100%;
     }
-    .value-container {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-      position: relative;
-    }
-
     .columnLayout {
       flex-direction: column;
     }
 
-    .single-value {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      overflow: hidden;
-      position: relative;
-      align-items: stretch;
-    }
-
-    header {
-      display: flex;
-      flex-direction: column;
-      margin: 0 0 16px 0;
-    }
     h3 {
       margin: 0;
-      max-width: 300px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     p {
-      margin: 10px 0 0 0;
-      max-width: 300px;
+      margin: 10px 0 16px 0;
       font-size: 14px;
-      line-height: 17px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+
+    .value-container {
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      gap: 12px;
+    }
+
+    .single-value {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      align-items: end;
+      font-size: 26px;
+      padding: 8px;
+      border-left: 4px solid #ddd;
+    }
+
     .current-value {
-      text-align: center;
+      font-size: 32px;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .label {
-      text-align: center;
+      font-weight: 300;
+      font-size: 16px;
       width: 100%;
+      white-space: wrap;
     }
-
   `;
 
   render() {
     return html`
       <div class="wrapper">
         <header>
-          <h3>${this.inputData?.settings.title}</h3>
-          <p>${this.inputData?.settings.subTitle}</p>
+          <h3 class="paging" ?active=${this.inputData?.settings.title}>${this.inputData?.settings.title}</h3>
+          <p class="paging" ?active=${this.inputData?.settings.subTitle}>${this.inputData?.settings.subTitle}</p>
         </header>
-        <div class="value-container ${this?.inputData?.settings.columnLayout ? 'columnLayout': ''}">
+        <div class="value-container ${this?.inputData?.settings.columnLayout ? 'columnLayout': ''} paging" ?active=${this.textActive}>
           ${repeat(// @ts-ignore 
-          this.dataSets, (ds: Dataseries, label) => label, (ds: Dataseries, label) => html`
+          this.dataSets, ([label]) => label, ([label, ds]) => {
+            // console.log('rendering', ds, label)
+            return html`
               <div class="single-value">
-                <div class="label">${label}</div>
-                <div class="current-value" label="${label}">${ds.needleValue.toFixed(0)} ${ds.unit}</div>
+                <div>
+                  <div class="label" label="${label}">${label}</div>
+                  <span class="current-value">${ds.needleValue.toFixed(0)}</span>
+                  <span class="label" label="${label}">${ds.unit}</span>
+                </div>
               </div>
-          `)}
+          `})}
         </div>
       </div>
     `;

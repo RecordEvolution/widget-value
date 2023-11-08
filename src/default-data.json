@@ -2,16 +2,17 @@
   "settings": {
     "title": "Value-Array",
     "subTitle": "This shows a value for each dataseries",
-    "columnLayout": false
+    "columnLayout": false,
+    "backgroundColor": "white"
   },
   "dataseries": [{
     "label": "Demo Value A",
-    "order": 1,
     "unit": "°C",
-    "color": "black",
-    "fontSize": "24px",
-    "sections": [-20, 20, 80, 98],
-    "backgroundColor": "white",
+    "order": 1,
+    "valueColor": "black",
+    "labelColor": "grey",
+    "valueFontSize": 32,
+    "labelFontSize": 16,
     "averageLatest": 1,
     "data": [{
       "value": 90,
@@ -27,14 +28,16 @@
       "pivot": "Frankfurt"
     },{
       "value": 50,
-      "pivot": "München"
+      "pivot": "Frankfurt"
     }]
   },{
     "label": "Demo Value B",
     "order": 2,
     "unit": "Pa",
-    "fontSize": "36px",
-    "color": "black",
+    "valueFontSize": 36,
+    "labelFontSize": 24,
+    "valueColor": "black",
+    "labelColor": "black",
     "sections": [50, 70, 80, 90, 200],
     "backgroundColor": "white",
     "averageLatest": 1,

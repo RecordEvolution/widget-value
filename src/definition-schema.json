@@ -14,6 +14,11 @@
                     "Title": "Subtitle",
                     "type": "string"
                 },
+                "backgroundColor": {
+                    "title": "Background colors",
+                    "description": "Background color of the widget.",
+                    "type": "string"
+                },
                 "columnLayout": {
                     "Title": "Vertical Layout",
                     "type": "boolean"
@@ -26,14 +31,14 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "needleColor": {
-                        "title": "Needle Color",
-                        "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
+                    "label": {
+                        "title": "Label",
+                        "description": "The label for the value.",
                         "type": "string"
                     },
                     "order": {
                         "title": "Draw Order",
-                        "description": "Determines the draw order of the gauges.",
+                        "description": "Determines the draw order of the values.",
                         "type": "number"
                     },
                     "unit": {
@@ -41,21 +46,30 @@
                         "description": "The unit of the values. e.g. °C or km/h",
                         "type": "string"
                     },
-                    "sections": {
-                        "title": "Sections",
-                        "description": "The amount of gauge sections. Starting from the min value, ending with the max value.",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                    "labelColor": {
+                        "title": "Label Color",
+                        "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
+                        "type": "string"
                     },
-                    "backgroundColors": {
-                        "title": "Section background colors",
+                    "valueColor": {
+                        "title": "Value Color",
+                        "description": "Give the color as a browser standard form. Either with names like 'red', 'green', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
+                        "type": "string"
+                    },
+                    "labelSize": {
+                        "title": "Label Font Size",
+                        "description": "The font size as number in pixels. e.g. 12 or 24",
+                        "type": "string"
+                    },
+                    "valueSize": {
+                        "title": "Value Font Size",
+                        "description": "The font size as number in pixels. e.g. 12 or 24",
+                        "type": "string"
+                    },
+                    "backgroundColor": {
+                        "title": "Background colors",
                         "description": "Background color for each section. This Array is one shorter than the number of sections.",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     "averageLatest": {
                         "title": "Average Latest Values",
