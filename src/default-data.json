@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "title": "Gauge-chart",
+    "subTitle": "This shows a gauge for each dataseries",
+    "columnLayout": false
+  },
+  "dataseries": [{
+    "label": "Demo Gauge 1",
+    "order": 1,
+    "unit": "°C",
+    "needleColor": "black",
+    "sections": [-20, 20, 80, 98],
+    "backgroundColors": [
+      "#AAC8A7",
+      "#F1C27B",
+      "#FF9B9B"
+    ],
+    "averageLatest": 1,
+    "data": [{
+      "value": 90,
+      "pivot": "Frankfurt"
+    },{
+      "value": 40,
+      "pivot": "Berlin"
+    },{
+      "value": 70,
+      "pivot": "Berlin"
+    },{
+      "value": 200,
+      "pivot": "Frankfurt"
+    },{
+      "value": 50,
+      "pivot": "München"
+    }]
+  },{
+    "label": "Demo Gauge 2",
+    "order": 2,
+    "unit": "Pa",
+    "needleColor": "black",
+    "sections": [50, 70, 80, 90, 200],
+    "backgroundColors": [
+      "#AAC8A7",
+      "#F1C27B",
+      "#FF9B9B",
+      "#FF919B"
+    ],
+    "averageLatest": 1,
+    "data": [{
+      "value": 80
+    }]
+  }]
+}
