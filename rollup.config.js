@@ -6,10 +6,10 @@ import babel from "@rollup/plugin-babel";
 export default {
     // if you use createSpaConfig, you can use your index.html as entrypoint,
     // any <script type="module"> inside will be bundled by rollup
-    input: './src/widget-gauge.ts',
+    input: './src/widget-value.ts',
     output: {
         dir: './dist',
-        name: 'regauge_bundle',
+        name: 'widget_value_bundle',
         banner: `/* @license Copyright (c) 2020 Record Evolution GmbH. All rights reserved.*/`,
         format: 'esm'
     },

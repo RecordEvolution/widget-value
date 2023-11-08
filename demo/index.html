@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Gauge</title>
+  <title>Value</title>
   <style>
     html, body {
       margin: 0;
@@ -12,7 +12,7 @@
       height: 100%;
     }
 
-    widget-gauge, #demo {
+    widget-value, #demo {
       width: 100%;
       height: 100%;
     }
@@ -25,7 +25,7 @@
 
   <script type="module">
     import { html, render } from 'lit';
-    import '../dist/src/widget-gauge.js';
+    import '../dist/src/widget-value.js';
     import data from '../src/default-data.json' assert { type: 'json' };
     
     const keyPathsToRandomize = ['dataseries.0.data.4.value', 'settings.title'];
@@ -35,9 +35,9 @@
       // console.log('random', randomizedObj.dataseries[0].data[0]);
       render(
         html`
-          <widget-gauge .inputData=${randomizedObj}>
+          <widget-value .inputData=${randomizedObj}>
             some light-dom
-          </widget-gauge>
+          </widget-value>
         `,
         document.querySelector('#demo')
       );

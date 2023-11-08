@@ -1,21 +1,21 @@
-# \<widget-gauge>
+# \<widget-value>
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
 ## Installation
 
 ```bash
-npm i widget-gauge
+npm i widget-value
 ```
 
 ## Usage
 
 ```html
 <script type="module">
-  import 'widget-gauge/widget-gauge.js';
+  import 'widget-value/widget-value.js';
 </script>
 
-<widget-gauge></widget-gauge>
+<widget-value></widget-value>
 ```
 
 ## Expected data format
@@ -64,8 +64,8 @@ data: {
 ```
 
 ## Style options
-The following options are available for styling the gauge graph.
-The `sections` option splits the gauge area into by default three same sized sections. Therefore three different colors can be provided to the `backgroundColor` by default.
+The following options are available for styling the value graph.
+The `sections` option splits the value area into by default three same sized sections. Therefore three different colors can be provided to the `backgroundColor` by default.
 ```
   interface Style {
     needleColor: string,

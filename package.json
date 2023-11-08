@@ -1,15 +1,15 @@
 {
-  "name": "widget-gauge",
-  "description": "REWidget widget-gauge",
+  "name": "widget-value",
+  "description": "REWidget widget-value",
   "license": "MIT",
-  "author": "widget-gauge",
-  "version": "1.4.5",
+  "author": "widget-value",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",
   "exports": {
     ".": "./dist/src/index.js",
-    "./widget-gauge.js": "./dist/src/widget-gauge.js"
+    "./widget-value.js": "./dist/src/widget-value.js"
   },
   "scripts": {
     "analyze": "cem analyze --litelement",
@@ -21,8 +21,6 @@
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore"
   },
   "dependencies": {
-    "3": "^2.1.0",
-    "chart.js": "^4.4.0",
     "lit": "^3.0.2"
   },
   "devDependencies": {
@@ -44,7 +42,7 @@
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.5",
-    "rollup": "^4.3.0",
+    "rollup": "^3.21.0",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "@rollup/plugin-typescript": "^11.1.5"

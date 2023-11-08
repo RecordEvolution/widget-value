@@ -1,4 +1,3 @@
-import type { Chart } from 'chart.js/auto';
 
 export interface Settings {
     title: string
@@ -14,14 +13,13 @@ export interface Dataseries {
     label: string
     order: number
     unit: string
-    needleColor: string
+    color: string
     averageLatest: number
-    sections: number[]
-    backgroundColors: string[]
+    fontSize: string
+    backgroundColor: string
     data: Data[]
     // not input values
     needleValue: number 
-    chartInstance: Chart
     range: number
     ranges: number[]
 }
