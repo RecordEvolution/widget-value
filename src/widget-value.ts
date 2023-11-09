@@ -32,13 +32,13 @@ export class WidgetValue extends LitElement {
       this.numberText?.forEach(n => {
         const label: string | null = n.getAttribute('label')
         const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-        n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier}px;`)
+        n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier}px; color: ${ds?.valueColor}`)
       })
 
       this.labelText?.forEach(n => {
         const label: string | null = n.getAttribute('label')
         const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-        n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px;`)
+        n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px; color: ${ds?.labelColor}`)
       })
 
       this.textActive = true
@@ -185,9 +185,19 @@ export class WidgetValue extends LitElement {
             return html`
               <div class="single-value">
                 <div>
-                  <div class="label" label="${label}">${label}</div>
-                  <span class="current-value">${ds.needleValue.toFixed(0)}</span>
-                  <span class="label" label="${label}">${ds.unit}</span>
+                  <div 
+                    class="label" 
+                    label="${label}"
+                    style="color: ${ds.labelColor}"
+                  >
+                    ${label}
+                  </div>
+                  <span class="current-value" label="${label}">
+                    ${ds.needleValue.toFixed(0)}
+                  </span>
+                  <span class="label" label="${label}">
+                    ${ds.unit}
+                  </span>
                 </div>
               </div>
           `})}
