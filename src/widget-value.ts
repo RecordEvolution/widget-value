@@ -193,7 +193,7 @@ export class WidgetValue extends LitElement {
                     ${label}
                   </div>
                   <span class="current-value" label="${label}">
-                    ${ds.needleValue.toFixed(0)}
+                    ${isNaN(ds.needleValue) ? '' : ds.needleValue.toFixed(0)}
                   </span>
                   <span class="label" label="${label}">
                     ${ds.unit}
