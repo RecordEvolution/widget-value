@@ -14,36 +14,20 @@ export class WidgetValue extends LitElement {
   @state()
   private textActive: boolean = false
 
-
   @state()
   private numberText?: NodeListOf<Element>
+
   @state()
   private labelText?: NodeListOf<Element>
+
+  @state()
+  private resizeTarget?: Element | undefined | null
 
   resizeObserver: ResizeObserver
 
   constructor() {
     super()
-    this.resizeObserver = new ResizeObserver((ev: ResizeObserverEntry[]) => {
-
-      const width: number = ev[0].contentRect.width
-      const height: number = ev[0].contentRect.height
-      const modifier = width * 0.006
-      this.numberText?.forEach(n => {
-        const label: string | null = n.getAttribute('label')
-        const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-        n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier}px; color: ${ds?.valueColor}`)
-      })
-
-      this.labelText?.forEach(n => {
-        const label: string | null = n.getAttribute('label')
-        const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-        n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px; color: ${ds?.labelColor}`)
-      })
-
-      this.textActive = true
-      
-    })
+    this.resizeObserver = new ResizeObserver((ev) => this.adjustSizes(ev[0]?.contentRect.width))
   }
 
   updated(changedProperties: Map<string, any>) {
@@ -54,12 +38,37 @@ export class WidgetValue extends LitElement {
     })
   }
 
+  adjustSizes(width: number = 0) {
+
+    const modifier = width * 0.006
+    this.numberText?.forEach(n => {
+      const label: string | null = n.getAttribute('label')
+      const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
+      n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier}px; color: ${ds?.valueColor}`)
+    })
+
+    this.labelText?.forEach(n => {
+      const label: string | null = n.getAttribute('label')
+      const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
+      n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px; color: ${ds?.labelColor}`)
+    })
+
+    this.textActive = true
+    
+  }
+
   async applyInputData() {
 
     if(!this?.inputData) return
 
-    const sv: Element | undefined | null = this.shadowRoot?.querySelector('.single-value')
-    if (sv) this.resizeObserver.observe(sv)
+    if (!this.resizeTarget || !this.resizeTarget?.getBoundingClientRect().width) {
+      this.resizeTarget = this.shadowRoot?.querySelector('.single-value')
+      const width = this.resizeTarget?.getBoundingClientRect().width
+      if (this.resizeTarget && width) {
+        this.adjustSizes(width)
+        this.resizeObserver.observe(this.resizeTarget)
+      }
+    }
 
     this.numberText = this?.shadowRoot?.querySelectorAll('.current-value')
     this.labelText = this?.shadowRoot?.querySelectorAll('.label')
@@ -175,10 +184,10 @@ export class WidgetValue extends LitElement {
     return html`
       <div class="wrapper">
         <header>
-          <h3 class="paging" ?active=${this.inputData?.settings.title}>${this.inputData?.settings.title}</h3>
-          <p class="paging" ?active=${this.inputData?.settings.subTitle}>${this.inputData?.settings.subTitle}</p>
+          <h3 class="paging" ?active=${this.inputData?.settings?.title}>${this.inputData?.settings?.title}</h3>
+          <p class="paging" ?active=${this.inputData?.settings?.subTitle}>${this.inputData?.settings?.subTitle}</p>
         </header>
-        <div class="value-container ${this?.inputData?.settings.columnLayout ? 'columnLayout': ''} paging" ?active=${this.textActive}>
+        <div class="value-container ${this?.inputData?.settings?.columnLayout ? 'columnLayout': ''}">
           ${repeat(// @ts-ignore 
           this.dataSets, ([label]) => label, ([label, ds]) => {
             // console.log('rendering', ds, label)
@@ -186,16 +195,20 @@ export class WidgetValue extends LitElement {
               <div class="single-value">
                 <div>
                   <div 
-                    class="label" 
+                    class="label paging"
+                    ?active=${this.textActive} 
                     label="${label}"
                     style="color: ${ds.labelColor}"
                   >
                     ${label}
                   </div>
-                  <span class="current-value" label="${label}">
+                  <span 
+                    class="current-value paging" 
+                    ?active=${this.textActive} 
+                    label="${label}">
                     ${isNaN(ds.needleValue) ? '' : ds.needleValue.toFixed(0)}
                   </span>
-                  <span class="label" label="${label}">
+                  <span class="label paging" label="${label}" ?active=${this.textActive} >
                     ${ds.unit}
                   </span>
                 </div>
