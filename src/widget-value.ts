@@ -30,12 +30,13 @@ export class WidgetValue extends LitElement {
     this.resizeObserver = new ResizeObserver((ev) => this.adjustSizes(ev[0]?.contentRect.width))
   }
 
-  updated(changedProperties: Map<string, any>) {
+  update(changedProperties: Map<string, any>) {
     changedProperties.forEach((oldValue, propName) => {
       if (propName === 'inputData') {
         this.applyInputData()
       }
     })
+    super.update(changedProperties)
   }
 
   adjustSizes(width: number = 0) {
@@ -57,10 +58,13 @@ export class WidgetValue extends LitElement {
     
   }
 
+  protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+      this.applyInputData()
+  }
+
   async applyInputData() {
 
-    if(!this?.inputData) return
-
+    if(!this.inputData) return
     if (!this.resizeTarget || !this.resizeTarget?.getBoundingClientRect().width) {
       this.resizeTarget = this.shadowRoot?.querySelector('.single-value')
       const width = this.resizeTarget?.getBoundingClientRect().width
