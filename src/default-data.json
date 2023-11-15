@@ -2,8 +2,7 @@
   "settings": {
     "title": "Value-Array",
     "subTitle": "This shows a value for each dataseries",
-    "columnLayout": false,
-    "backgroundColor": "white"
+    "columnLayout": false
   },
   "dataseries": [{
     "label": "Demo Value A",
