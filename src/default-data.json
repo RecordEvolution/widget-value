@@ -1,7 +1,5 @@
 {
   "settings": {
-    "title": "Value-Array",
-    "subTitle": "This shows a value for each dataseries",
     "columnLayout": false
   },
   "dataseries": [{
