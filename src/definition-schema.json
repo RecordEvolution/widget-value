@@ -11,7 +11,7 @@
                     "type": "string"
                 },
                 "subTitle": {
-                    "Title": "Subtitle",
+                    "title": "Subtitle",
                     "type": "string"
                 },
                 "backgroundColor": {
@@ -20,7 +20,7 @@
                     "type": "string"
                 },
                 "columnLayout": {
-                    "Title": "Vertical Layout",
+                    "title": "Vertical Layout",
                     "type": "boolean"
                 }
             }
