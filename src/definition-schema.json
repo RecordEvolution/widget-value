@@ -67,9 +67,8 @@
                         "type": "string"
                     },
                     "backgroundColor": {
-                        "title": "Background colors",
-                        "description": "Background color for each section. This Array is one shorter than the number of sections.",
-                        "type": "string"
+                        "title": "Background color",
+                        "type": "color"
                     },
                     "averageLatest": {
                         "title": "Average Latest Values",
