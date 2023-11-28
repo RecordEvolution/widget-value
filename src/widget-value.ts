@@ -118,7 +118,6 @@ export class WidgetValue extends LitElement {
   static styles = css`
     :host {
       display: block;
-      color: var(--widget-value-text-color, #000);
       font-family: sans-serif;
       padding: 16px;
       box-sizing: border-box;
@@ -143,6 +142,7 @@ export class WidgetValue extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: var(--re-text-color, #000) !important;
     }
     p {
       margin: 10px 0 16px 0;
@@ -150,6 +150,7 @@ export class WidgetValue extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: var(--re-text-color, #000) !important;
     }
 
     .value-container {
@@ -174,6 +175,7 @@ export class WidgetValue extends LitElement {
       font-size: 32px;
       font-weight: 600;
       white-space: nowrap;
+      color: var(--re-user-label-color, --re-text-color, #000) !important;
     }
 
     .label {
@@ -181,6 +183,7 @@ export class WidgetValue extends LitElement {
       font-size: 16px;
       width: 100%;
       white-space: wrap;
+      color: var(--re-user-label-color, --re-text-color, #000) !important;
     }
   `;
 
@@ -194,7 +197,7 @@ export class WidgetValue extends LitElement {
         <div class="value-container ${this?.inputData?.settings?.columnLayout ? 'columnLayout': ''}">
           ${repeat(// @ts-ignore 
           this.dataSets, ([label]) => label, ([label, ds]) => {
-            // console.log('rendering', ds, label)
+            this.style.setProperty("--re-user-label-color", ds.labelColor)
             return html`
               <div class="single-value">
                 <div>
@@ -202,7 +205,6 @@ export class WidgetValue extends LitElement {
                     class="label paging"
                     ?active=${this.textActive} 
                     label="${label}"
-                    style="color: ${ds.labelColor}"
                   >
                     ${label}
                   </div>
