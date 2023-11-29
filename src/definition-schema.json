@@ -18,10 +18,6 @@
                     "title": "Background color",
                     "description": "Background color of the widget.",
                     "type": "color"
-                },
-                "columnLayout": {
-                    "title": "Vertical Layout",
-                    "type": "boolean"
                 }
             }
         },
@@ -48,12 +44,10 @@
                     },
                     "labelColor": {
                         "title": "Label Color",
-                        "description": "Give the color as a browser standard form. Either with names like ''red'', ''green'', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
                         "type": "color"
                     },
                     "valueColor": {
                         "title": "Value Color",
-                        "description": "Give the color as a browser standard form. Either with names like ''red'', ''green'', etc. or as #de432b34 where two hex digits represent Red Green Blue Opacity in this order.",
                         "type": "color"
                     },
                     "labelSize": {
@@ -89,7 +83,7 @@
                                 },
                                 "pivot": {
                                     "title": "Pivot Column",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify ''city'' as pivot column, then you will get a gauge for each city.",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as pivot column, then you will get a gauge for each city.",
                                     "type": "string"
                                 }
                             },

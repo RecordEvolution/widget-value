@@ -1,7 +1,5 @@
 {
-  "settings": {
-    "columnLayout": false
-  },
+
   "dataseries": [{
     "label": "Demo Value A",
     "unit": "°C",
