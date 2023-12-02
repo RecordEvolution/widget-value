@@ -101,7 +101,7 @@ export class WidgetValue extends LitElement {
     const fit = fits.find(f => f.size === maxSize)
     const modifier = (fit?.m ?? 1)
 
-    console.log('FITS', fits, 'modifier', modifier, 'cols',fit?.c, 'rows', fit?.r, 'new size', fit?.size.toFixed(0), 'total space', (userWidth* userHeight).toFixed(0))
+    // console.log('FITS', fits, 'modifier', modifier, 'cols',fit?.c, 'rows', fit?.r, 'new size', fit?.size.toFixed(0), 'total space', (userWidth* userHeight).toFixed(0))
 
     this.boxes?.forEach(box => box.setAttribute("style", `width:${modifier*width}px; height:${modifier*height}px`))
     this.numberText?.forEach(n => {
