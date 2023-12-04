@@ -209,9 +209,9 @@ export class WidgetValue extends LitElement {
       position: relative;
       align-items: end;
       font-size: 26px;
-      padding: 8px;
+      padding: 12px;
       box-sizing: border-box;
-      border-left: 4px solid #ddd;
+      /* border-left: 4px solid #ddd; */
     }
 
     .current-value {
