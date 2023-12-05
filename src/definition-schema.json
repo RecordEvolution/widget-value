@@ -1,5 +1,5 @@
 {
-    "title": "Gauge-chart Configuration",
+    "title": "Value-chart Configuration",
     "type": "object",
     "properties": {
         "settings": {
@@ -16,7 +16,6 @@
                 },
                 "backgroundColor": {
                     "title": "Background color",
-                    "description": "Background color of the widget.",
                     "type": "color"
                 }
             }
