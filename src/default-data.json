@@ -1,7 +1,5 @@
 {
   "settings": {
-    "title": "Test",
-    "subTitle": "subtest"
   },
   "dataseries": [{
     "label": "Demo Value A",
