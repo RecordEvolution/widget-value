@@ -12,7 +12,7 @@ export class WidgetValue extends LitElement {
   private dataSets: Map<string, Dataseries> = new Map()
 
   @state()
-  private textActive: boolean = false
+  private textActive: boolean = true
 
   @state()
   private numberText?: HTMLDivElement[]
@@ -27,7 +27,6 @@ export class WidgetValue extends LitElement {
 
   valueContainer?: HTMLDivElement
   boxes?: HTMLDivElement[]
-  inners?: HTMLDivElement[]
   origWidth: number = 0
   origHeight: number = 0
   constructor() {
@@ -57,26 +56,28 @@ export class WidgetValue extends LitElement {
     if (this.origWidth !== 0 && this.origHeight !== 0) return
 
       this.boxes = Array.from(this?.shadowRoot?.querySelectorAll('.single-value') as NodeListOf<HTMLDivElement>)
-      this.inners = Array.from(this?.shadowRoot?.querySelectorAll('.inner') as NodeListOf<HTMLDivElement>)
       this.numberText = Array.from(this?.shadowRoot?.querySelectorAll('.current-value') as NodeListOf<HTMLDivElement>)
       this.labelText = Array.from(this?.shadowRoot?.querySelectorAll('.label') as NodeListOf<HTMLDivElement>)
+      this.valueContainer = this?.shadowRoot?.querySelector('.value-container') as HTMLDivElement
 
-      this.origWidth = this.inners?.map(b => b.getBoundingClientRect().width).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
-      this.origHeight = this.inners?.map(b => b.getBoundingClientRect().height).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
-      if (this.origWidth > 0) this.origWidth += 16
-      if (this.origHeight > 0) this.origHeight += 16
+      this.origWidth = this.boxes?.map(b => b.getBoundingClientRect().width).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
+      this.origHeight = this.boxes?.map(b => b.getBoundingClientRect().height).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
+      // if (this.origWidth > 0) this.origWidth += 12
+      // if (this.origHeight > 0) this.origHeight += 12
   
       this.adjustSizes()
 
   }
 
-  adjustSizes() {
-    const userWidth = this.getBoundingClientRect().width
-    const userHeight = this.getBoundingClientRect().height
+  adjustSizes() {    
+    const userWidth = this.valueContainer?.getBoundingClientRect().width
+    const userHeight = this.valueContainer?.getBoundingClientRect().height
     const count = this.dataSets.size
-
+    
     const width = this.origWidth
     const height = this.origHeight
+    if (!userWidth || !userHeight || !width || !height) return
+    console.log(width, height)
 
     const fits = []
     for (let c = 1; c <= count; c++) {
@@ -100,20 +101,19 @@ export class WidgetValue extends LitElement {
     const maxSize = fits.reduce((p, c) => c.size < p ? p : c.size, 0)
     const fit = fits.find(f => f.size === maxSize)
     const modifier = (fit?.m ?? 1)
-
     // console.log('FITS', fits, 'modifier', modifier, 'cols',fit?.c, 'rows', fit?.r, 'new size', fit?.size.toFixed(0), 'total space', (userWidth* userHeight).toFixed(0))
 
-    this.boxes?.forEach(box => box.setAttribute("style", `width:${modifier*width}px; height:${modifier*height}px`))
+    this.boxes?.forEach(box => box.setAttribute("style", `width:${modifier*width}px; height:${modifier*height}px; padding:${modifier*6}px`))
     this.numberText?.forEach(n => {
       const label: string | null = n.getAttribute('label')
       const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-      n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 26) * modifier*0.8}px; color: ${ds?.valueColor}`)
+      n.setAttribute("style", `font-size: ${(ds?.valueFontSize ?? 32) * modifier}px; ${ds?.valueColor ? "color: " + ds?.valueColor: ''}`)
     })
 
     this.labelText?.forEach(n => {
       const label: string | null = n.getAttribute('label')
       const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-      n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier*0.8}px; color: ${ds?.labelColor}`)
+      n.setAttribute("style", `font-size: ${(ds?.labelFontSize ?? 26) * modifier}px; ${ds?.labelColor ? "color: " + ds?.labelColor: ''}`)
     })
 
     this.textActive = true
@@ -129,7 +129,7 @@ export class WidgetValue extends LitElement {
 
       // pivot data
       const distincts = [...new Set(ds.data.map((d: Data) => d.pivot))]
-      if (distincts.length > 1) {
+      if (distincts.length > 1 || distincts[0] !== undefined) {
         distincts.forEach((piv) => {
           const pds: any = {
             label: `${ds.label} ${piv}`,
@@ -138,9 +138,6 @@ export class WidgetValue extends LitElement {
             averageLatest: ds.averageLatest,
             labelColor: ds.labelColor,
             valueColor: ds.valueColor,
-            labelFontSize: ds.labelFontSize,
-            valueFontSize: ds.valueFontSize,
-            backgroundColor: ds.backgroundColor,
             data: ds.data.filter(d => d.pivot === piv)
           }
           this.dataSets.set(pds.label, pds)
@@ -185,6 +182,8 @@ export class WidgetValue extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding: 16px 0px 0px 16px;
+      box-sizing: border-box;
       color: var(--re-text-color, #000) !important;
     }
     p {
@@ -193,15 +192,19 @@ export class WidgetValue extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding-left: 16px;
+      box-sizing: border-box;
       color: var(--re-text-color, #000) !important;
     }
 
     .value-container {
       display: flex;
       flex-wrap: wrap;
+      align-items: flex-start;
+      flex: 1;
       overflow: hidden;
       position: relative;
-      gap: 12px;
+      /* gap: 12px; */
     }
 
     .single-value {
@@ -209,7 +212,7 @@ export class WidgetValue extends LitElement {
       position: relative;
       align-items: end;
       font-size: 26px;
-      padding: 12px;
+      padding: 6px;
       box-sizing: border-box;
       /* border-left: 4px solid #ddd; */
     }
@@ -218,13 +221,13 @@ export class WidgetValue extends LitElement {
       font-size: 32px;
       font-weight: 600;
       white-space: nowrap;
-      color: var(--re-user-label-color, --re-text-color, #000) !important;
+      color: var(--re-text-color, #000);
     }
 
     .label {
       font-weight: 300;
-      font-size: 16px;
-      color: var(--re-user-label-color, --re-text-color, #000) !important;
+      font-size: 26px;
+      color: var(--re-text-color, #000);
       white-space: nowrap;
     }
   `;
@@ -239,10 +242,8 @@ export class WidgetValue extends LitElement {
         <div class="value-container">
           ${repeat(// @ts-ignore 
           this.dataSets, ([label]) => label, ([label, ds]) => {
-            this.style.setProperty("--re-user-label-color", ds.labelColor)
             return html`
               <div class="single-value">
-                <div class="inner">
                   <div 
                     class="label paging"
                     ?active=${this.textActive} 
@@ -259,7 +260,6 @@ export class WidgetValue extends LitElement {
                   <span class="label paging" label="${label}" ?active=${this.textActive} >
                     ${ds.unit}
                   </span>
-                </div>
               </div>
           `})}
         </div>

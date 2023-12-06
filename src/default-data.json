@@ -1,13 +1,14 @@
 {
-
+  "settings": {
+    "title": "Test",
+    "subTitle": "subtest"
+  },
   "dataseries": [{
     "label": "Demo Value A",
     "unit": "°C",
     "order": 1,
     "valueColor": "black",
     "labelColor": "grey",
-    "valueFontSize": 32,
-    "labelFontSize": 16,
     "averageLatest": 1,
     "data": [{
       "value": 90,
@@ -29,15 +30,13 @@
     "label": "Demo Value B",
     "order": 2,
     "unit": "Pa",
-    "valueFontSize": 36,
-    "labelFontSize": 24,
     "valueColor": "black",
     "labelColor": "black",
     "sections": [50, 70, 80, 90, 200],
-    "backgroundColor": "white",
     "averageLatest": 1,
     "data": [{
-      "value": 80
+      "value": 80,
+      "pivot": "test"
     }]
   }]
 }

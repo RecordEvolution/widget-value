@@ -5,68 +5,54 @@
         "settings": {
             "title": "Global Settings",
             "type": "object",
+            "order": 1,
             "properties": {
                 "title": {
                     "title": "Title",
-                    "type": "string"
+                    "type": "string",
+                    "order": 1
                 },
                 "subTitle": {
                     "title": "Subtitle",
-                    "type": "string"
-                },
-                "backgroundColor": {
-                    "title": "Background color",
-                    "type": "color"
+                    "type": "string",
+                    "order": 2
                 }
             }
         },
         "dataseries": {
             "title": "Value Displays",
             "type": "array",
+            "order": 2,
             "items": {
                 "type": "object",
                 "properties": {
                     "label": {
                         "title": "Label",
                         "description": "The label for the value.",
-                        "type": "string"
-                    },
-                    "order": {
-                        "title": "Draw Order",
-                        "description": "Determines the draw order of the values.",
-                        "type": "number"
+                        "type": "string",
+                        "order": 1
                     },
                     "unit": {
                         "title": "Unit",
-                        "description": "The unit of the values. e.g. °C or km/h",
-                        "type": "string"
+                        "description": "The unit of the value. e.g. °C or km/h",
+                        "type": "string",
+                        "order": 2
                     },
                     "labelColor": {
                         "title": "Label Color",
-                        "type": "color"
+                        "type": "color",
+                        "order": 3
                     },
                     "valueColor": {
                         "title": "Value Color",
-                        "type": "color"
-                    },
-                    "labelSize": {
-                        "title": "Label Font Size",
-                        "description": "The font size as number in pixels. e.g. 12 or 24",
-                        "type": "string"
-                    },
-                    "valueSize": {
-                        "title": "Value Font Size",
-                        "description": "The font size as number in pixels. e.g. 12 or 24",
-                        "type": "string"
-                    },
-                    "backgroundColor": {
-                        "title": "Background color",
-                        "type": "color"
+                        "type": "color",
+                        "order": 4
                     },
                     "averageLatest": {
                         "title": "Average Latest Values",
                         "description": "Calculate the average over the given number of newest values. (If pivoted, then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.",
-                        "type": "number"
+                        "type": "number",
+                        "order": 6
                     },
                     "data": {
                         "title": "Data",
@@ -78,19 +64,21 @@
                             "properties": {
                                 "value": {
                                     "title": "Value",
-                                    "type": "number"
+                                    "type": "number",
+                                    "order": 1
                                 },
                                 "pivot": {
                                     "title": "Pivot Column",
                                     "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as pivot column, then you will get a gauge for each city.",
-                                    "type": "string"
+                                    "type": "string",
+                                    "order": 2
                                 }
                             },
                             "required": ["value"]
                         }
                     }
                 },
-                "required": ["value"]
+                "required": ["label"]
             }
         }
     }
