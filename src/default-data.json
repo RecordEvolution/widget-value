@@ -2,37 +2,31 @@
   "settings": {
   },
   "dataseries": [{
-    "label": "Demo Value A",
+    "label": "Temperature",
     "unit": "°C",
     "valueColor": "black",
     "labelColor": "grey",
     "averageLatest": 1,
     "data": [{
-      "value": 90,
-      "pivot": "Frankfurt"
+      "value": 90
     },{
-      "value": 40,
-      "pivot": "Berlin"
+      "value": 40
     },{
-      "value": 70,
-      "pivot": "Berlin"
+      "value": 70
     },{
-      "value": 200,
-      "pivot": "Frankfurt"
+      "value": 200
     },{
-      "value": 50,
-      "pivot": "Frankfurt"
+      "value": 50
     }]
   },{
-    "label": "Demo Value B",
+    "label": "Humidity",
     "unit": "Pa",
     "valueColor": "black",
     "labelColor": "black",
     "sections": [50, 70, 80, 90, 200],
     "averageLatest": 1,
     "data": [{
-      "value": 80,
-      "pivot": "test"
+      "value": 80
     }]
   }]
 }
