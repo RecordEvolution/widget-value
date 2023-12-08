@@ -59,7 +59,8 @@
                         "title": "Data",
                         "description": "The data used to draw this data series.",
                         "type": "array",
-                        "buffersize": 1000,
+                        "order": 7,
+                        "buffersize": 100,
                         "items": {
                             "type": "object",
                             "properties": {
