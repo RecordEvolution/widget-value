@@ -77,7 +77,6 @@ export class WidgetValue extends LitElement {
     const width = this.origWidth
     const height = this.origHeight
     if (!userWidth || !userHeight || !width || !height) return
-    console.log(width, height)
 
     const fits = []
     for (let c = 1; c <= count; c++) {
