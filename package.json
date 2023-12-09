@@ -5,12 +5,12 @@
     "author": "widget-value",
     "version": "1.0.3",
     "type": "module",
-    "main": "dist/src/index.js",
-    "module": "dist/src/index.js",
-    "exports": {
-        ".": "./dist/src/index.js",
-        "./widget-value.js": "./dist/src/widget-value.js"
-    },
+    "main": "dist/widget-value.js",
+    "types": "dist/src/widget-value.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
     "scripts": {
         "analyze": "cem analyze --litelement",
         "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
