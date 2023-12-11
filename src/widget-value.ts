@@ -180,21 +180,20 @@ export class WidgetValue extends LitElement {
 
     h3 {
       margin: 0;
+      max-width: 300px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 16px 0px 0px 16px;
-      box-sizing: border-box;
       color: var(--re-text-color, #000) !important;
     }
     p {
-      margin: 10px 0 16px 0;
+      margin: 10px 0 0 0;
+      max-width: 300px;
       font-size: 14px;
+      line-height: 17px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 16px;
-      box-sizing: border-box;
       color: var(--re-text-color, #000) !important;
     }
 
