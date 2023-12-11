@@ -62,8 +62,8 @@ export class WidgetValue extends LitElement {
 
       this.origWidth = this.boxes?.map(b => b.getBoundingClientRect().width).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
       this.origHeight = this.boxes?.map(b => b.getBoundingClientRect().height).reduce((p, c) => c > p ? c : p, 0 ) ?? 0
-      // if (this.origWidth > 0) this.origWidth += 12
-      // if (this.origHeight > 0) this.origHeight += 12
+      if (this.origWidth > 0) this.origWidth += 16
+      if (this.origHeight > 0) this.origHeight += 16
   
       this.adjustSizes()
 
@@ -174,6 +174,8 @@ export class WidgetValue extends LitElement {
       flex-direction: column;
       height: 100%;
       width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
     }
 
     h3 {
@@ -199,11 +201,12 @@ export class WidgetValue extends LitElement {
     .value-container {
       display: flex;
       flex-wrap: wrap;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: center;
       flex: 1;
       overflow: hidden;
       position: relative;
-      /* gap: 12px; */
+      gap: 12px;
     }
 
     .single-value {
