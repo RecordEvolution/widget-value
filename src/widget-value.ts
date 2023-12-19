@@ -148,6 +148,7 @@ export class WidgetValue extends LitElement {
 
     // filter latest values and calculate average
     this.dataSets.forEach((ds, label) => {
+      if (typeof ds.averageLatest !== 'number' || !isNaN(ds.averageLatest)) ds.averageLatest = 1
       ds.data = ds.data.splice(-ds.averageLatest ?? -1)
       ds.needleValue = ds.data.map(d => d.value).reduce(( p, c ) => p + c, 0) / ds.data.length
     })
