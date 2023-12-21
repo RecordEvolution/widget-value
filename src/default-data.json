@@ -4,26 +4,17 @@
   "dataseries": [{
     "label": "Temperature",
     "unit": "°C",
-    "valueColor": "black",
-    "labelColor": "grey",
+    "valueColor": "#e15656",
+    "labelColor": "#ff9b9b",
     "averageLatest": 1,
     "data": [{
       "value": 90
-    },{
-      "value": 40
-    },{
-      "value": 70
-    },{
-      "value": 200
-    },{
-      "value": 50
     }]
   },{
     "label": "Humidity",
     "unit": "Pa",
-    "valueColor": "black",
-    "labelColor": "black",
-    "sections": [50, 70, 80, 90, 200],
+    "valueColor": "#5898d0",
+    "labelColor": "#96caf8",
     "averageLatest": 1,
     "data": [{
       "value": 80
