@@ -20,8 +20,7 @@ export class WidgetValue extends LitElement {
   @state()
   private labelText?: HTMLDivElement[]
 
-  @state()
-  private resizeTarget?: Element | undefined | null
+  version: string = 'versionplaceholder'
 
   resizeObserver: ResizeObserver
 
@@ -270,4 +269,4 @@ export class WidgetValue extends LitElement {
   }
 }
 
-window.customElements.define('widget-value', WidgetValue);
+window.customElements.define('widget-value-versionplaceholder', WidgetValue);

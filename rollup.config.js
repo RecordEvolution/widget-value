@@ -1,3 +1,4 @@
+import replace from '@rollup/plugin-replace';
 import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
@@ -9,11 +10,15 @@ export default {
     input: './src/widget-value.ts',
     output: {
         dir: './dist',
+        sourcemap: true,
         name: 'widget_value_bundle',
-        banner: `/* @license Copyright (c) 2020 Record Evolution GmbH. All rights reserved.*/`,
+        banner: `/* @license Copyright (c) 2023 Record Evolution GmbH. All rights reserved.*/`,
         format: 'esm'
     },
     plugins: [
+        replace({
+            versionplaceholder: require('./package.json').version,
+        }),
         typescript({ sourceMap: true }),
         nodeResolve(),
         commonjs({}),
