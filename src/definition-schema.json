@@ -25,6 +25,7 @@
             "order": 2,
             "items": {
                 "type": "object",
+                "required": ["label"],
                 "properties": {
                     "label": {
                         "title": "Label",
@@ -41,12 +42,14 @@
                     },
                     "labelColor": {
                         "title": "Label Color",
-                        "type": "color",
+                        "type": "string",
+                        "color": true,
                         "order": 3
                     },
                     "valueColor": {
                         "title": "Value Color",
-                        "type": "color",
+                        "type": "string",
+                        "color": true,
                         "order": 4
                     },
                     "averageLatest": {
@@ -63,6 +66,7 @@
                         "buffersize": 100,
                         "items": {
                             "type": "object",
+                            "required": ["value"],
                             "properties": {
                                 "value": {
                                     "title": "Value",
