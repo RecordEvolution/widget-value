@@ -38,17 +38,17 @@ export class WidgetValue extends LitElement {
     }
 
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+        this.valueContainer = this?.shadowRoot?.querySelector('.value-container') as HTMLDivElement
+
+        this.sizingSetup()
         this.applyInputData()
     }
 
     update(changedProperties: Map<string, any>) {
-        changedProperties.forEach((oldValue, propName) => {
-            if (propName === 'inputData') {
-                this.applyInputData()
-            }
-        })
-
-        this.sizingSetup()
+        if (changedProperties.has('inputData')) {
+            this.sizingSetup()
+            this.applyInputData()
+        }
 
         super.update(changedProperties)
     }
@@ -56,30 +56,23 @@ export class WidgetValue extends LitElement {
     sizingSetup() {
         if (this.origWidth !== 0 && this.origHeight !== 0) return
 
-        this.boxes = Array.from(
-            this?.shadowRoot?.querySelectorAll('.single-value') as NodeListOf<HTMLDivElement>
+        const boxes = Array.from(
+            this?.shadowRoot?.querySelectorAll(
+                '.sizing-container > .single-value'
+            ) as NodeListOf<HTMLDivElement>
         )
-        this.numberText = Array.from(
-            this?.shadowRoot?.querySelectorAll('.current-value') as NodeListOf<HTMLDivElement>
-        )
-        this.labelText = Array.from(
-            this?.shadowRoot?.querySelectorAll('.label') as NodeListOf<HTMLDivElement>
-        )
-        this.valueContainer = this?.shadowRoot?.querySelector('.value-container') as HTMLDivElement
 
         this.origWidth =
-            this.boxes?.map((b) => b.getBoundingClientRect().width).reduce((p, c) => (c > p ? c : p), 0) ?? 0
+            boxes?.map((b) => b.getBoundingClientRect().width).reduce((p, c) => (c > p ? c : p), 0) ?? 0
         this.origHeight =
-            this.boxes?.map((b) => b.getBoundingClientRect().height).reduce((p, c) => (c > p ? c : p), 0) ?? 0
-        if (this.origWidth > 0) this.origWidth += 16
-        if (this.origHeight > 0) this.origHeight += 16
+            boxes?.map((b) => b.getBoundingClientRect().height).reduce((p, c) => (c > p ? c : p), 0) ?? 0
 
         this.adjustSizes()
     }
 
     adjustSizes() {
-        const userWidth = this.valueContainer?.getBoundingClientRect().width
-        const userHeight = this.valueContainer?.getBoundingClientRect().height
+        const userWidth = (this.valueContainer?.getBoundingClientRect().width ?? 32) - 32
+        const userHeight = (this.valueContainer?.getBoundingClientRect().height ?? 32) - 32
         const count = this.dataSets.size
 
         const width = this.origWidth
@@ -104,31 +97,44 @@ export class WidgetValue extends LitElement {
             const size = m * m * width * height * count
             if (c * m * width < uwgap) fits.push({ r, m, size, width, height, userWidth, userHeight })
         }
-
         const maxSize = fits.reduce((p, c) => (c.size < p ? p : c.size), 0)
         const fit = fits.find((f) => f.size === maxSize)
         const modifier = fit?.m ?? 1
         // console.log('FITS', fits, 'modifier', modifier, 'cols',fit?.c, 'rows', fit?.r, 'new size', fit?.size.toFixed(0), 'total space', (userWidth* userHeight).toFixed(0))
 
-        this.boxes?.forEach((box) =>
+        const boxes = Array.from(
+            this?.shadowRoot?.querySelectorAll(
+                '.value-container > .single-value'
+            ) as NodeListOf<HTMLDivElement>
+        )
+
+        boxes?.forEach((box) =>
             box.setAttribute(
                 'style',
                 `width:${modifier * width}px; height:${modifier * height}px; padding:${modifier * 6}px`
             )
         )
-        this.numberText?.forEach((n) => {
+
+        boxes?.forEach((n) => {
             const label: string | null = n.getAttribute('label')
             const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-            n.setAttribute(
+            const numberText = n.querySelector('.current-value') as HTMLDivElement
+            numberText.setAttribute(
                 'style',
                 `font-size: ${32 * modifier}px; ${ds?.valueColor ? 'color: ' + ds?.valueColor : ''}`
             )
         })
 
-        this.labelText?.forEach((n) => {
+        boxes?.forEach((n) => {
             const label: string | null = n.getAttribute('label')
             const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-            n.setAttribute(
+            const labelText = n.querySelector('.label') as HTMLDivElement
+            labelText.setAttribute(
+                'style',
+                `font-size: ${26 * modifier}px; ${ds?.labelColor ? 'color: ' + ds?.labelColor : ''}`
+            )
+            const unitText = n.querySelector('.unit') as HTMLDivElement
+            unitText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; ${ds?.labelColor ? 'color: ' + ds?.labelColor : ''}`
             )
@@ -198,6 +204,7 @@ export class WidgetValue extends LitElement {
             display: flex;
             flex-direction: column;
             height: 100%;
+            line-height: 0.9;
             width: 100%;
             padding: 16px;
             box-sizing: border-box;
@@ -237,7 +244,6 @@ export class WidgetValue extends LitElement {
             overflow: hidden;
             position: relative;
             align-items: end;
-            font-size: 26px;
             padding: 6px;
             box-sizing: border-box;
             /* border-left: 4px solid #ddd; */
@@ -250,11 +256,24 @@ export class WidgetValue extends LitElement {
             color: var(--re-text-color, #000);
         }
 
-        .label {
+        .label,
+        .unit {
             font-weight: 300;
             font-size: 26px;
             color: var(--re-text-color, #000);
             white-space: nowrap;
+        }
+
+        .sizing-container {
+            position: absolute;
+            left: 10000px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            overflow: hidden;
+            gap: 12px;
         }
     `
 
@@ -269,29 +288,41 @@ export class WidgetValue extends LitElement {
                         ${this.inputData?.settings?.subTitle}
                     </p>
                 </header>
-                <div class="value-container">
+                <div class="sizing-container">
                     ${repeat(
-                        // @ts-ignore
                         this.dataSets,
                         ([label]) => label,
                         ([label, ds]) => {
                             return html`
-                                <div class="single-value">
-                                    <div class="label paging" ?active=${this.textActive} label="${label}">
-                                        ${label}
+                                <div class="single-value" label="${label}">
+                                    <div class="label paging" ?active=${this.textActive}>${label}</div>
+                                    <div class="horizontal">
+                                        <div class="current-value paging" ?active=${this.textActive}>
+                                            ${isNaN(ds.needleValue as number)
+                                                ? ''
+                                                : (ds.needleValue as number).toFixed(0)}
+                                        </div>
+                                        <div class="unit paging" ?active=${this.textActive}>${ds.unit}</div>
                                     </div>
-                                    <span
-                                        class="current-value paging"
-                                        ?active=${this.textActive}
-                                        label="${label}"
-                                    >
+                                </div>
+                            `
+                        }
+                    )}
+                </div>
+                <div class="value-container">
+                    ${repeat(
+                        this.dataSets,
+                        ([label]) => label,
+                        ([label, ds]) => {
+                            return html`
+                                <div class="single-value" label="${label}">
+                                    <div class="label paging" ?active=${this.textActive}>${label}</div>
+                                    <span class="current-value paging" ?active=${this.textActive}>
                                         ${isNaN(ds.needleValue as number)
                                             ? ''
                                             : (ds.needleValue as number).toFixed(0)}
                                     </span>
-                                    <span class="label paging" label="${label}" ?active=${this.textActive}>
-                                        ${ds.unit}
-                                    </span>
+                                    <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>
                             `
                         }
