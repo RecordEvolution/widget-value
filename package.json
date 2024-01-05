@@ -1,12 +1,12 @@
 {
-    "name": "@record-evolution/widget-value",
-    "description": "REWidget widget-value",
+    "name": "@record-evolution/widget-table",
+    "description": "REWidget widget-table",
     "license": "MIT",
-    "author": "widget-value",
-    "version": "1.0.12",
+    "author": "widget-table",
+    "version": "1.0.9",
     "type": "module",
-    "main": "dist/widget-value.js",
-    "types": "dist/src/widget-value.d.ts",
+    "main": "dist/widget-table.js",
+    "types": "dist/src/widget-table.d.ts",
     "files": [
         "dist",
         "src"
@@ -14,8 +14,8 @@
     "scripts": {
         "analyze": "cem analyze --litelement",
         "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
-        "build": "rollup -c rollup.config.js --bundleConfigAsCjs",
-        "watch": "rollup -w -c rollup.config.js --bundleConfigAsCjs",
+        "build": "rollup -c rollup.config.js",
+        "watch": "rollup -w -c rollup.config.js",
         "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
         "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
         "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
@@ -23,6 +23,7 @@
         "release": "npm version patch --tag-version-prefix='' && git push && git push --tag"
     },
     "dependencies": {
+        "@material/web": "^1.0.1",
         "lit": "^3.1.0"
     },
     "devDependencies": {
@@ -53,14 +54,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/RecordEvolution/widget-value.git"
+        "url": "git+https://github.com/RecordEvolution/widget-table.git"
     },
     "keywords": [
         "widget",
-        "value"
+        "table"
     ],
     "bugs": {
-        "url": "https://github.com/RecordEvolution/widget-value/issues"
+        "url": "https://github.com/RecordEvolution/widget-table/issues"
     },
-    "homepage": "https://github.com/RecordEvolution/widget-value#readme"
+    "homepage": "https://github.com/RecordEvolution/widget-table#readme"
 }
