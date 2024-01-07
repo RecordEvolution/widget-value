@@ -71,8 +71,8 @@ export class WidgetValue extends LitElement {
     }
 
     adjustSizes() {
-        const userWidth = (this.valueContainer?.getBoundingClientRect().width ?? 32) - 32
-        const userHeight = (this.valueContainer?.getBoundingClientRect().height ?? 32) - 32
+        const userWidth = this.valueContainer?.getBoundingClientRect().width
+        const userHeight = this.valueContainer?.getBoundingClientRect().height
         const count = this.dataSets.size
 
         const width = this.origWidth
@@ -86,7 +86,7 @@ export class WidgetValue extends LitElement {
             const uhgap = userHeight - 12 * (r - 1)
             const m = uwgap / width / c
             const size = m * m * width * height * count
-            if (r * m * height < uhgap) fits.push({ c, m, size, width, height, userWidth, userHeight })
+            if (r * m * height <= uhgap) fits.push({ c, m, size, width, height, userWidth, userHeight })
         }
 
         for (let r = 1; r <= count; r++) {
@@ -95,7 +95,7 @@ export class WidgetValue extends LitElement {
             const uhgap = userHeight - 12 * (r - 1)
             const m = uhgap / height / r
             const size = m * m * width * height * count
-            if (c * m * width < uwgap) fits.push({ r, m, size, width, height, userWidth, userHeight })
+            if (c * m * width <= uwgap) fits.push({ r, m, size, width, height, userWidth, userHeight })
         }
         const maxSize = fits.reduce((p, c) => (c.size < p ? p : c.size), 0)
         const fit = fits.find((f) => f.size === maxSize)
