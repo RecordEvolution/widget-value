@@ -3,7 +3,7 @@
     "description": "REWidget widget-table",
     "license": "MIT",
     "author": "widget-table",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "type": "module",
     "main": "dist/widget-table.js",
     "types": "dist/src/widget-table.d.ts",
