@@ -39,17 +39,23 @@
                         "type": "string",
                         "order": 2
                     },
+                    "precision": {
+                        "title": "Precision",
+                        "description": "Number of digits after the decimal point. (Default 0)",
+                        "type": "number",
+                        "order": 3
+                    },
                     "labelColor": {
                         "title": "Label Color",
                         "type": "string",
                         "color": true,
-                        "order": 3
+                        "order": 4
                     },
                     "valueColor": {
                         "title": "Value Color",
                         "type": "string",
                         "color": true,
-                        "order": 4
+                        "order": 5
                     },
                     "averageLatest": {
                         "title": "Average Latest Values",

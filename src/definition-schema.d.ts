@@ -15,6 +15,10 @@ export type Label = string;
  * The unit of the value. e.g. °C or km/h
  */
 export type Unit = string;
+/**
+ * Number of digits after the decimal point
+ */
+export type Precision = number;
 export type LabelColor = string;
 export type ValueColor = string;
 /**
@@ -30,13 +34,14 @@ export type PivotColumn = string;
  * The data used to draw this data series.
  */
 export type Data = {
-  value: Value;
+  value?: Value;
   pivot?: PivotColumn;
   [k: string]: unknown;
 }[];
 export type ValueDisplays = {
-  label: Label;
+  label?: Label;
   unit?: Unit;
+  precision?: Precision;
   labelColor?: LabelColor;
   valueColor?: ValueColor;
   averageLatest?: AverageLatestValues;

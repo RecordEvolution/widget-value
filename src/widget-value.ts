@@ -3,7 +3,7 @@ import { repeat } from 'lit/directives/repeat.js'
 import { property, state } from 'lit/decorators.js'
 import { ValueChartConfiguration } from './definition-schema.js'
 
-type Dataseries = Exclude<ValueChartConfiguration['dataseries'], undefined>[number]
+type Dataseries = Exclude<ValueChartConfiguration['dataseries'], undefined>[number] & { needleValue?: number }
 type Data = Exclude<Dataseries['data'], undefined>[number]
 
 export class WidgetValue extends LitElement {
@@ -151,22 +151,27 @@ export class WidgetValue extends LitElement {
             // ?.sort((a, b) => a.order - b.order)
             ?.forEach((ds) => {
                 // pivot data
-                const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))]
+                const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))].filter(
+                    (d) => d
+                ) as string[]
+                ds.needleValue = undefined
                 if (distincts.length > 1 || distincts[0] !== undefined) {
                     distincts.forEach((piv) => {
-                        const pds: any = {
-                            label: `${ds.label} ${piv}`,
+                        const pds: Dataseries = {
+                            label: `${ds.label ?? ''}-${piv}`,
                             order: ds.order,
                             unit: ds.unit,
+                            precision: ds.precision,
                             averageLatest: ds.averageLatest,
                             labelColor: ds.labelColor,
                             valueColor: ds.valueColor,
-                            data: ds.data?.filter((d) => d.pivot === piv)
+                            data: ds.data?.filter((d) => d.pivot === piv),
+                            needleValue: undefined
                         }
-                        this.dataSets.set(pds.label, pds)
+                        this.dataSets.set(pds.label ?? '', pds)
                     })
                 } else {
-                    this.dataSets.set(ds.label, ds)
+                    this.dataSets.set(ds.label ?? '', ds)
                 }
             })
 
@@ -297,9 +302,9 @@ export class WidgetValue extends LitElement {
                                 <div class="single-value" label="${label}">
                                     <div class="label paging" ?active=${this.textActive}>${label}</div>
                                     <span class="current-value paging" ?active=${this.textActive}>
-                                        ${isNaN(ds.needleValue as number)
+                                        ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
-                                            : (ds.needleValue as number).toFixed(0)}
+                                            : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
                                     </span>
                                     <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>
@@ -316,9 +321,9 @@ export class WidgetValue extends LitElement {
                                 <div class="single-value" label="${label}">
                                     <div class="label paging" ?active=${this.textActive}>${label}</div>
                                     <span class="current-value paging" ?active=${this.textActive}>
-                                        ${isNaN(ds.needleValue as number)
+                                        ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
-                                            : (ds.needleValue as number).toFixed(0)}
+                                            : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
                                     </span>
                                     <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>

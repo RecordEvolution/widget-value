@@ -1,23 +1,30 @@
 {
-  "settings": {
-  },
-  "dataseries": [{
-    "label": "Temperature",
-    "unit": "°C",
-    "valueColor": "#e15656",
-    "labelColor": "#ff9b9b",
-    "averageLatest": 1,
-    "data": [{
-      "value": 90
-    }]
-  },{
-    "label": "Humidity",
-    "unit": "Pa",
-    "valueColor": "#5898d0",
-    "labelColor": "#96caf8",
-    "averageLatest": 1,
-    "data": [{
-      "value": 80
-    }]
-  }]
+    "settings": {},
+    "dataseries": [
+        {
+            "label": "Temperature",
+            "unit": "°C",
+            "precision": 2,
+            "valueColor": "#e15656",
+            "labelColor": "#ff9b9b",
+            "averageLatest": 1,
+            "data": [
+                {
+                    "value": 90
+                }
+            ]
+        },
+        {
+            "label": "Humidity",
+            "unit": "Pa",
+            "valueColor": "#5898d0",
+            "labelColor": "#96caf8",
+            "averageLatest": 1,
+            "data": [
+                {
+                    "value": 80
+                }
+            ]
+        }
+    ]
 }
