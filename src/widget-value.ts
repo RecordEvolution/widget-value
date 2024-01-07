@@ -42,12 +42,14 @@ export class WidgetValue extends LitElement {
 
         this.sizingSetup()
         this.applyInputData()
+        this.adjustSizes()
     }
 
     update(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
             this.sizingSetup()
             this.applyInputData()
+            this.adjustSizes()
         }
 
         super.update(changedProperties)
