@@ -28,7 +28,7 @@
             import '../dist/src/widget-value.js'
             import data from '../src/default-data.json' assert { type: 'json' }
 
-            const keyPathsToRandomize = ['dataseries.0.data.4.value', 'settings.title']
+            const keyPathsToRandomize = ['dataseries.0.data.0.value', 'settings.title']
             setInterval(() => {
                 const randomizedObj = randomizeObjectValues(data, keyPathsToRandomize)
 

@@ -296,14 +296,12 @@ export class WidgetValue extends LitElement {
                             return html`
                                 <div class="single-value" label="${label}">
                                     <div class="label paging" ?active=${this.textActive}>${label}</div>
-                                    <div class="horizontal">
-                                        <div class="current-value paging" ?active=${this.textActive}>
-                                            ${isNaN(ds.needleValue as number)
-                                                ? ''
-                                                : (ds.needleValue as number).toFixed(0)}
-                                        </div>
-                                        <div class="unit paging" ?active=${this.textActive}>${ds.unit}</div>
-                                    </div>
+                                    <span class="current-value paging" ?active=${this.textActive}>
+                                        ${isNaN(ds.needleValue as number)
+                                            ? ''
+                                            : (ds.needleValue as number).toFixed(0)}
+                                    </span>
+                                    <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>
                             `
                         }
@@ -311,7 +309,7 @@ export class WidgetValue extends LitElement {
                 </div>
                 <div class="value-container">
                     ${repeat(
-                        this.dataSets,
+                        [...this.dataSets.entries()].sort(),
                         ([label]) => label,
                         ([label, ds]) => {
                             return html`
