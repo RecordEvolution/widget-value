@@ -1,12 +1,12 @@
 {
-    "name": "@record-evolution/widget-table",
-    "description": "REWidget widget-table",
+    "name": "@record-evolution/widget-value",
+    "description": "REWidget widget-value",
     "license": "MIT",
-    "author": "widget-table",
+    "author": "widget-value",
     "version": "1.0.15",
     "type": "module",
-    "main": "dist/widget-table.js",
-    "types": "dist/src/widget-table.d.ts",
+    "main": "dist/widget-value.js",
+    "types": "dist/src/widget-value.d.ts",
     "files": [
         "dist",
         "src"
@@ -54,14 +54,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/RecordEvolution/widget-table.git"
+        "url": "git+https://github.com/RecordEvolution/widget-value.git"
     },
     "keywords": [
         "widget",
         "table"
     ],
     "bugs": {
-        "url": "https://github.com/RecordEvolution/widget-table/issues"
+        "url": "https://github.com/RecordEvolution/widget-value/issues"
     },
-    "homepage": "https://github.com/RecordEvolution/widget-table#readme"
+    "homepage": "https://github.com/RecordEvolution/widget-value#readme"
 }
