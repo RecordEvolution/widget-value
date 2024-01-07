@@ -160,7 +160,7 @@ export class WidgetValue extends LitElement {
                 if (distincts.length > 1 || distincts[0] !== undefined) {
                     distincts.forEach((piv) => {
                         const pds: Dataseries = {
-                            label: `${ds.label ?? ''}-${piv}`,
+                            label: `${piv} - ${ds.label ?? ''}`,
                             order: ds.order,
                             unit: ds.unit,
                             precision: ds.precision,
