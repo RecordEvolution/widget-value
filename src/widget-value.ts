@@ -42,14 +42,12 @@ export class WidgetValue extends LitElement {
 
         this.sizingSetup()
         this.applyInputData()
-        this.adjustSizes()
     }
 
     update(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
             this.sizingSetup()
             this.applyInputData()
-            this.adjustSizes()
         }
 
         super.update(changedProperties)
@@ -190,7 +188,7 @@ export class WidgetValue extends LitElement {
 
         this.requestUpdate()
         await this.updateComplete
-
+        this.adjustSizes()
         // console.log('Value Datasets', this.dataSets)
     }
 
@@ -307,8 +305,8 @@ export class WidgetValue extends LitElement {
                                         ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
                                             : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
+                                        <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                     </span>
-                                    <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>
                             `
                         }
@@ -326,8 +324,8 @@ export class WidgetValue extends LitElement {
                                         ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
                                             : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
+                                        <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                     </span>
-                                    <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
                                 </div>
                             `
                         }
