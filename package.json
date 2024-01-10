@@ -3,7 +3,7 @@
     "description": "REWidget widget-value",
     "license": "MIT",
     "author": "widget-value",
-    "version": "1.0.21",
+    "version": "1.0.22",
     "type": "module",
     "main": "dist/widget-value.js",
     "types": "dist/src/widget-value.d.ts",
