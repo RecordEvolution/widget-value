@@ -15,7 +15,7 @@
             ]
         },
         {
-            "label": "Humidity",
+            "label": "Pressure",
             "unit": "Pa",
             "valueColor": "#5898d0",
             "labelColor": "#96caf8",

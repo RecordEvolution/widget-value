@@ -16,7 +16,7 @@ export type Label = string;
  */
 export type Unit = string;
 /**
- * Number of digits after the decimal point
+ * Number of digits after the decimal point. (Default 0)
  */
 export type Precision = number;
 export type LabelColor = string;
@@ -25,6 +25,14 @@ export type ValueColor = string;
  * Calculate the average over the given number of newest values. (If pivoted, then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
  */
 export type AverageLatestValues = number;
+/**
+ * If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.
+ */
+export type MaximumLatency = number;
+/**
+ * This should be an ISO String date like 2023-11-04T22:47:52.351152+00:00. Will only be used to detect data age of data.
+ */
+export type Timestamp = string;
 export type Value = number;
 /**
  * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as pivot column, then you will get a gauge for each city.
@@ -34,6 +42,7 @@ export type PivotColumn = string;
  * The data used to draw this data series.
  */
 export type Data = {
+  tsp?: Timestamp;
   value?: Value;
   pivot?: PivotColumn;
   [k: string]: unknown;
@@ -45,6 +54,7 @@ export type ValueDisplays = {
   labelColor?: LabelColor;
   valueColor?: ValueColor;
   averageLatest?: AverageLatestValues;
+  maxLatency?: MaximumLatency;
   data?: Data;
   [k: string]: unknown;
 }[];

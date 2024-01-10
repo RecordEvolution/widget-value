@@ -145,7 +145,9 @@ export class WidgetValue extends LitElement {
 
     async applyInputData() {
         if (!this.inputData) return
-
+        this.dataSets.forEach((d) => {
+            d.label ??= ''
+        })
         this.dataSets = new Map()
         this.inputData?.dataseries
             // ?.sort((a, b) => a.order - b.order)
@@ -182,6 +184,13 @@ export class WidgetValue extends LitElement {
             ds.data = ds?.data?.splice(-ds.averageLatest || -1)
             const values = (ds?.data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
             const average = values.reduce((p, c) => p + c, 0) / values.length
+
+            // Check age of data Latency
+            const tsp = Date.parse(ds.data?.[0].tsp ?? '')
+            if (isNaN(tsp)) {
+                const now = new Date().getTime()
+                if (now - tsp > (ds.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
+            }
 
             ds.needleValue = average
         })

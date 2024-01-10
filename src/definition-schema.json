@@ -63,15 +63,27 @@
                         "type": "number",
                         "order": 6
                     },
+                    "maxLatency": {
+                        "title": "Maximum Latency",
+                        "description": "If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.",
+                        "type": "number",
+                        "order": 7
+                    },
                     "data": {
                         "title": "Data",
                         "description": "The data used to draw this data series.",
                         "type": "array",
-                        "order": 7,
+                        "order": 8,
                         "buffersize": 100,
                         "items": {
                             "type": "object",
                             "properties": {
+                                "tsp": {
+                                    "title": "Timestamp",
+                                    "description": "This should be an ISO String date like 2023-11-04T22:47:52.351152+00:00. Will only be used to detect data age of data.",
+                                    "type": "string",
+                                    "order": 1
+                                },
                                 "value": {
                                     "title": "Value",
                                     "type": "number",
