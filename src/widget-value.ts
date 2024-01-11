@@ -160,7 +160,7 @@ export class WidgetValue extends LitElement {
                 if (distincts.length > 1 || distincts[0] !== undefined) {
                     distincts.forEach((piv) => {
                         const pds: Dataseries = {
-                            label: `${piv} - ${ds.label ?? ''}`,
+                            label: `${piv ?? ''} - ${ds.label ?? ''}`,
                             order: ds.order,
                             unit: ds.unit,
                             precision: ds.precision,
@@ -186,7 +186,7 @@ export class WidgetValue extends LitElement {
             const average = values.reduce((p, c) => p + c, 0) / values.length
 
             // Check age of data Latency
-            const tsp = Date.parse(ds.data?.[0].tsp ?? '')
+            const tsp = Date.parse(ds.data?.[0]?.tsp ?? '')
             if (isNaN(tsp)) {
                 const now = new Date().getTime()
                 if (now - tsp > (ds.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
@@ -218,7 +218,6 @@ export class WidgetValue extends LitElement {
             display: flex;
             flex-direction: column;
             height: 100%;
-            line-height: 0.9;
             width: 100%;
             padding: 16px;
             box-sizing: border-box;
@@ -248,6 +247,7 @@ export class WidgetValue extends LitElement {
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
+            line-height: 0.9;
             flex: 1;
             overflow: hidden;
             position: relative;
@@ -282,6 +282,7 @@ export class WidgetValue extends LitElement {
             position: absolute;
             left: 10000px;
             display: flex;
+            line-height: 0.9;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
