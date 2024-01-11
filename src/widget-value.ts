@@ -153,28 +153,23 @@ export class WidgetValue extends LitElement {
             // ?.sort((a, b) => a.order - b.order)
             ?.forEach((ds) => {
                 // pivot data
-                const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))].filter(
-                    (d) => d
-                ) as string[]
+                const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))].sort() as string[]
                 ds.needleValue = undefined
-                if (distincts.length > 1 || distincts[0] !== undefined) {
-                    distincts.forEach((piv) => {
-                        const pds: Dataseries = {
-                            label: `${piv ?? ''} - ${ds.label ?? ''}`,
-                            order: ds.order,
-                            unit: ds.unit,
-                            precision: ds.precision,
-                            averageLatest: ds.averageLatest,
-                            labelColor: ds.labelColor,
-                            valueColor: ds.valueColor,
-                            data: ds.data?.filter((d) => d.pivot === piv),
-                            needleValue: undefined
-                        }
-                        this.dataSets.set(pds.label ?? '', pds)
-                    })
-                } else {
-                    this.dataSets.set(ds.label ?? '', ds)
-                }
+                distincts.forEach((piv) => {
+                    const prefix = piv ? `${piv} - ` : ''
+                    const pds: Dataseries = {
+                        label: prefix + ds.label ?? '',
+                        order: ds.order,
+                        unit: ds.unit,
+                        precision: ds.precision,
+                        averageLatest: ds.averageLatest,
+                        labelColor: ds.labelColor,
+                        valueColor: ds.valueColor,
+                        data: distincts.length === 1 ? ds.data : ds.data?.filter((d) => d.pivot === piv),
+                        needleValue: undefined
+                    }
+                    this.dataSets.set(pds.label ?? '', pds)
+                })
             })
 
         // filter latest values and calculate average
