@@ -47,13 +47,13 @@
                     },
                     "labelColor": {
                         "title": "Label Color",
-                        "type": "string",
+                        "type": "color",
                         "color": true,
                         "order": 4
                     },
                     "valueColor": {
                         "title": "Value Color",
-                        "type": "string",
+                        "type": "color",
                         "color": true,
                         "order": 5
                     },
