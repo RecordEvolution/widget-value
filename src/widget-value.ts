@@ -176,16 +176,12 @@ export class WidgetValue extends LitElement {
         this.dataSets.forEach((ds, label) => {
             if (typeof ds.averageLatest !== 'number' || !isNaN(ds.averageLatest)) ds.averageLatest = 1
 
-            const data = ds?.data?.slice(0, ds.averageLatest ?? 1) ?? []
+            const data = ds?.data?.slice(0, ds?.averageLatest ?? 1) ?? []
             const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
             const average = values.reduce((p, c) => p + c, 0) / values.length
 
             // Check age of data Latency
-<<<<<<< Updated upstream
             const tsp = Date.parse(data?.[0]?.tsp ?? '')
-=======
-            const tsp = Date.parse(ds?.data?.[0]?.tsp ?? '')
->>>>>>> Stashed changes
             if (isNaN(tsp)) {
                 const now = new Date().getTime()
                 if (now - tsp > (ds.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
