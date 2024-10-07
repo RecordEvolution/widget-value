@@ -1,23 +1,16 @@
 {
-    "title": "Value-chart Configuration",
+    "title": "InputData",
     "type": "object",
     "properties": {
-        "settings": {
-            "title": "Global Settings",
-            "type": "object",
-            "order": 1,
-            "properties": {
-                "title": {
-                    "title": "Title",
-                    "type": "string",
-                    "order": 1
-                },
-                "subTitle": {
-                    "title": "Subtitle",
-                    "type": "string",
-                    "order": 2
-                }
-            }
+        "title": {
+            "title": "Title",
+            "type": "string",
+            "order": 1
+        },
+        "subTitle": {
+            "title": "Subtitle",
+            "type": "string",
+            "order": 2
         },
         "dataseries": {
             "title": "Value Displays",
@@ -45,35 +38,51 @@
                         "type": "number",
                         "order": 3
                     },
-                    "labelColor": {
-                        "title": "Label Color",
-                        "type": "color",
-                        "color": true,
-                        "order": 4
+                    "styling": {
+                        "title": "Styling",
+                        "description": "",
+                        "type": "object",
+                        "order": 6,
+                        "properties": {
+                            "labelColor": {
+                                "title": "Label Color",
+                                "type": "color",
+                                "color": true,
+                                "order": 4
+                            },
+                            "valueColor": {
+                                "title": "Value Color",
+                                "type": "color",
+                                "color": true,
+                                "order": 5
+                            }
+                        }
                     },
-                    "valueColor": {
-                        "title": "Value Color",
-                        "type": "color",
-                        "color": true,
-                        "order": 5
-                    },
-                    "averageLatest": {
-                        "title": "Average Latest Values",
-                        "description": "Calculate the average over the given number of newest values. (If pivoted, then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.",
-                        "type": "number",
-                        "order": 6
-                    },
-                    "maxLatency": {
-                        "title": "Maximum Latency",
-                        "description": "If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.",
-                        "type": "number",
-                        "order": 7
+                    "advanced": {
+                        "title": "Advanced Settings",
+                        "description": "",
+                        "type": "object",
+                        "order": 7,
+                        "properties": {
+                            "averageLatest": {
+                                "title": "Average Latest Values",
+                                "description": "Calculate the average over the given number of newest values. (If you use \"Split data by\", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.",
+                                "type": "number",
+                                "order": 6
+                            },
+                            "maxLatency": {
+                                "title": "Maximum Latency",
+                                "description": "If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.",
+                                "type": "number",
+                                "order": 7
+                            }
+                        }
                     },
                     "data": {
                         "title": "Data",
                         "description": "The data used to draw this data series.",
                         "type": "array",
-                        "order": 8,
+                        "order": 4,
                         "buffersize": 100,
                         "items": {
                             "type": "object",
@@ -91,8 +100,8 @@
                                     "order": 1
                                 },
                                 "pivot": {
-                                    "title": "Pivot Column",
-                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as pivot column, then you will get a gauge for each city.",
+                                    "title": "Split Data by",
+                                    "description": "You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as split column, then you will get a value field for each city.",
                                     "type": "string",
                                     "order": 2
                                 }

@@ -1,14 +1,14 @@
 import { html, css, LitElement, PropertyValueMap } from 'lit'
 import { repeat } from 'lit/directives/repeat.js'
 import { property, state } from 'lit/decorators.js'
-import { ValueChartConfiguration } from './definition-schema.js'
+import { InputData } from './definition-schema.js'
 
-type Dataseries = Exclude<ValueChartConfiguration['dataseries'], undefined>[number] & { needleValue?: number }
+type Dataseries = Exclude<InputData['dataseries'], undefined>[number] & { needleValue?: number }
 type Data = Exclude<Dataseries['data'], undefined>[number]
 
 export class WidgetValue extends LitElement {
     @property({ type: Object })
-    inputData?: ValueChartConfiguration
+    inputData?: InputData
 
     @state()
     private dataSets: Map<string, Dataseries> = new Map()
@@ -121,7 +121,7 @@ export class WidgetValue extends LitElement {
             const numberText = n.querySelector('.current-value') as HTMLDivElement
             numberText.setAttribute(
                 'style',
-                `font-size: ${32 * modifier}px; ${ds?.valueColor ? 'color: ' + ds?.valueColor : ''}`
+                `font-size: ${32 * modifier}px; ${ds?.styling?.valueColor ? 'color: ' + ds?.styling?.valueColor : ''}`
             )
         })
 
@@ -131,12 +131,12 @@ export class WidgetValue extends LitElement {
             const labelText = n.querySelector('.label') as HTMLDivElement
             labelText.setAttribute(
                 'style',
-                `font-size: ${26 * modifier}px; ${ds?.labelColor ? 'color: ' + ds?.labelColor : ''}`
+                `font-size: ${26 * modifier}px; ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
             )
             const unitText = n.querySelector('.unit') as HTMLDivElement
             unitText.setAttribute(
                 'style',
-                `font-size: ${26 * modifier}px; ${ds?.labelColor ? 'color: ' + ds?.labelColor : ''}`
+                `font-size: ${26 * modifier}px; ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
             )
         })
 
@@ -158,13 +158,12 @@ export class WidgetValue extends LitElement {
                 distincts.forEach((piv) => {
                     const prefix = piv ? `${piv} - ` : ''
                     const pds: Dataseries = {
-                        label: prefix + ds.label ?? '',
+                        label: prefix + ds.label,
                         order: ds.order,
                         unit: ds.unit,
                         precision: ds.precision,
-                        averageLatest: ds.averageLatest,
-                        labelColor: ds.labelColor,
-                        valueColor: ds.valueColor,
+                        advanced: ds.advanced,
+                        styling: ds.styling,
                         data: distincts.length === 1 ? ds.data : ds.data?.filter((d) => d.pivot === piv),
                         needleValue: undefined
                     }
@@ -174,9 +173,10 @@ export class WidgetValue extends LitElement {
 
         // filter latest values and calculate average
         this.dataSets.forEach((ds, label) => {
-            if (typeof ds.averageLatest !== 'number' || !isNaN(ds.averageLatest)) ds.averageLatest = 1
+            ds.advanced ??= {}
+            if (typeof ds.advanced?.averageLatest !== 'number' || !isNaN(ds.advanced?.averageLatest)) ds.advanced.averageLatest = 1
 
-            const data = ds?.data?.slice(0, ds?.averageLatest ?? 1) ?? []
+            const data = ds?.data?.slice(0, ds?.advanced?.averageLatest ?? 1) ?? []
             const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
             const average = values.reduce((p, c) => p + c, 0) / values.length
 
@@ -184,7 +184,7 @@ export class WidgetValue extends LitElement {
             const tsp = Date.parse(data?.[0]?.tsp ?? '')
             if (isNaN(tsp)) {
                 const now = new Date().getTime()
-                if (now - tsp > (ds.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
+                if (now - tsp > (ds.advanced?.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
             }
 
             ds.needleValue = average
@@ -291,11 +291,11 @@ export class WidgetValue extends LitElement {
         return html`
             <div class="wrapper">
                 <header>
-                    <h3 class="paging" ?active=${this.inputData?.settings?.title}>
-                        ${this.inputData?.settings?.title}
+                    <h3 class="paging" ?active=${this.inputData?.title}>
+                        ${this.inputData?.title}
                     </h3>
-                    <p class="paging" ?active=${this.inputData?.settings?.subTitle}>
-                        ${this.inputData?.settings?.subTitle}
+                    <p class="paging" ?active=${this.inputData?.subTitle}>
+                        ${this.inputData?.subTitle}
                     </p>
                 </header>
                 <div class="sizing-container">

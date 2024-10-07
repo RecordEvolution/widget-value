@@ -19,10 +19,8 @@ export type Unit = string;
  * Number of digits after the decimal point. (Default 0)
  */
 export type Precision = number;
-export type LabelColor = string;
-export type ValueColor = string;
 /**
- * Calculate the average over the given number of newest values. (If pivoted, then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
+ * Calculate the average over the given number of newest values. (If you use "Split data by", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
  */
 export type AverageLatestValues = number;
 /**
@@ -35,37 +33,47 @@ export type MaximumLatency = number;
 export type Timestamp = string;
 export type Value = number;
 /**
- * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as pivot column, then you will get a gauge for each city.
+ * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as split column, then you will get a value field for each city.
  */
-export type PivotColumn = string;
+export type SplitDataBy = string;
 /**
  * The data used to draw this data series.
  */
 export type Data = {
   tsp?: Timestamp;
   value?: Value;
-  pivot?: PivotColumn;
+  pivot?: SplitDataBy;
   [k: string]: unknown;
 }[];
 export type ValueDisplays = {
   label?: Label;
   unit?: Unit;
   precision?: Precision;
-  labelColor?: LabelColor;
-  valueColor?: ValueColor;
-  averageLatest?: AverageLatestValues;
-  maxLatency?: MaximumLatency;
+  styling?: Styling;
+  advanced?: AdvancedSettings;
   data?: Data;
   [k: string]: unknown;
 }[];
 
-export interface ValueChartConfiguration {
-  settings?: GlobalSettings;
+export interface InputData {
+  title?: Title;
+  subTitle?: Subtitle;
   dataseries?: ValueDisplays;
   [k: string]: unknown;
 }
-export interface GlobalSettings {
-  title?: Title;
-  subTitle?: Subtitle;
+export interface Styling {
+  labelColor?: LabelColor;
+  valueColor?: ValueColor;
+  [k: string]: unknown;
+}
+export interface LabelColor {
+  [k: string]: unknown;
+}
+export interface ValueColor {
+  [k: string]: unknown;
+}
+export interface AdvancedSettings {
+  averageLatest?: AverageLatestValues;
+  maxLatency?: MaximumLatency;
   [k: string]: unknown;
 }

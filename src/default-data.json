@@ -5,9 +5,13 @@
             "label": "Temperature",
             "unit": "°C",
             "precision": 2,
-            "valueColor": "#e15656",
-            "labelColor": "#ff9b9b",
-            "averageLatest": 1,
+            "styling": {
+                "labelColor": "#ff9b9b",
+                "valueColor": "#e15656"
+            },
+            "advanced": {
+                "averageLatest": 1
+            },
             "data": [
                 {
                     "value": 90
@@ -17,9 +21,13 @@
         {
             "label": "Pressure",
             "unit": "Pa",
-            "valueColor": "#5898d0",
-            "labelColor": "#96caf8",
-            "averageLatest": 1,
+            "styling": {
+                "labelColor": "#96caf8",
+                "valueColor": "#5898d0"
+            },
+            "advanced": {
+                "averageLatest": 1
+            },
             "data": [
                 {
                     "value": 80
