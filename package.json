@@ -3,11 +3,11 @@
     "description": "REWidget widget-value",
     "license": "MIT",
     "author": "widget-value",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "engines": {
         "node": "18.18.2",
         "npm": ">=10.0.2"
-      },
+    },
     "type": "module",
     "main": "dist/widget-value.js",
     "types": "dist/src/widget-value.d.ts",
