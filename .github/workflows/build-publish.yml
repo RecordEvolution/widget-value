@@ -22,7 +22,7 @@ jobs:
         run: npm install --omit-dev --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: npm run build --force
 
       - name: Login to npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc

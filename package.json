@@ -4,6 +4,10 @@
     "license": "MIT",
     "author": "widget-value",
     "version": "1.1.1",
+    "engines": {
+        "node": "18.18.2",
+        "npm": ">=10.0.2"
+      },
     "type": "module",
     "main": "dist/widget-value.js",
     "types": "dist/src/widget-value.d.ts",
@@ -28,8 +32,6 @@
     },
     "devDependencies": {
         "@custom-elements-manifest/analyzer": "^0.10.3",
-        "@open-wc/building-rollup": "^3.0.2",
-        "@open-wc/eslint-config": "^12.0.3",
         "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-commonjs": "^28.0.0",
         "@rollup/plugin-node-resolve": "^15.3.0",
@@ -58,7 +60,7 @@
     },
     "keywords": [
         "widget",
-        "table"
+        "value"
     ],
     "bugs": {
         "url": "https://github.com/RecordEvolution/widget-value/issues"
