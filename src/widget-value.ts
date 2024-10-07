@@ -24,7 +24,7 @@ export class WidgetValue extends LitElement {
 
     version: string = 'versionplaceholder'
 
-    resizeObserver: ResizeObserver
+    private resizeObserver: ResizeObserver
 
     valueContainer?: HTMLDivElement
     boxes?: HTMLDivElement[]
@@ -32,9 +32,15 @@ export class WidgetValue extends LitElement {
     origHeight: number = 0
     constructor() {
         super()
-
-        this.resizeObserver = new ResizeObserver((ev) => this.adjustSizes())
+        this.resizeObserver = new ResizeObserver(this.adjustSizes.bind(this))
         this.resizeObserver.observe(this)
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback()
+        if(this.resizeObserver) {
+            this.resizeObserver.disconnect()
+        }
     }
 
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
