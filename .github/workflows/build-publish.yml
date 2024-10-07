@@ -19,10 +19,10 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install --omit-dev --frozen-lockfile
+        run: npm install --frozen-lockfile
 
       - name: Build
-        run: npm run build --force
+        run: npm run build
 
       - name: Login to npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
