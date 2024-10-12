@@ -15,6 +15,7 @@
         "dataseries": {
             "title": "Value Displays",
             "type": "array",
+            "dataDrivenDisabled": true,
             "order": 2,
             "items": {
                 "type": "object",
@@ -30,12 +31,14 @@
                         "title": "Unit",
                         "description": "The unit of the value. e.g. °C or km/h",
                         "type": "string",
+                        "dataDrivenDisabled": true,
                         "order": 2
                     },
                     "precision": {
                         "title": "Precision",
                         "description": "Number of digits after the decimal point. (Default 0)",
                         "type": "number",
+                        "dataDrivenDisabled": true,
                         "order": 3
                     },
                     "styling": {
@@ -68,12 +71,14 @@
                                 "title": "Average Latest Values",
                                 "description": "Calculate the average over the given number of newest values. (If you use \"Split data by\", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.",
                                 "type": "number",
+                                "dataDrivenDisabled": true,
                                 "order": 6
                             },
                             "maxLatency": {
                                 "title": "Maximum Latency",
                                 "description": "If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.",
                                 "type": "number",
+                                "dataDrivenDisabled": true,
                                 "order": 7
                             }
                         }
