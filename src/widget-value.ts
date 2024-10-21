@@ -38,7 +38,7 @@ export class WidgetValue extends LitElement {
 
     disconnectedCallback() {
         super.disconnectedCallback()
-        if(this.resizeObserver) {
+        if (this.resizeObserver) {
             this.resizeObserver.disconnect()
         }
     }
@@ -180,9 +180,10 @@ export class WidgetValue extends LitElement {
         // filter latest values and calculate average
         this.dataSets.forEach((ds, label) => {
             ds.advanced ??= {}
-            if (typeof ds.advanced?.averageLatest !== 'number' || !isNaN(ds.advanced?.averageLatest)) ds.advanced.averageLatest = 1
+            if (typeof ds.advanced?.averageLatest !== 'number' || !isNaN(ds.advanced?.averageLatest))
+                ds.advanced.averageLatest = 1
 
-            const data = ds?.data?.slice(0, ds?.advanced?.averageLatest ?? 1) ?? []
+            const data = ds?.data?.slice(-ds?.advanced?.averageLatest || -1) ?? []
             const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
             const average = values.reduce((p, c) => p + c, 0) / values.length
 
@@ -291,18 +292,25 @@ export class WidgetValue extends LitElement {
             overflow: hidden;
             gap: 12px;
         }
+
+        .no-data {
+            font-size: 20px;
+            color: var(--re-text-color, #000);
+            display: flex;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
     `
 
     render() {
         return html`
             <div class="wrapper">
                 <header>
-                    <h3 class="paging" ?active=${this.inputData?.title}>
-                        ${this.inputData?.title}
-                    </h3>
-                    <p class="paging" ?active=${this.inputData?.subTitle}>
-                        ${this.inputData?.subTitle}
-                    </p>
+                    <h3 class="paging" ?active=${this.inputData?.title}>${this.inputData?.title}</h3>
+                    <p class="paging" ?active=${this.inputData?.subTitle}>${this.inputData?.subTitle}</p>
                 </header>
                 <div class="sizing-container">
                     ${repeat(
@@ -323,6 +331,7 @@ export class WidgetValue extends LitElement {
                         }
                     )}
                 </div>
+                <div class="paging no-data" ?active=${!this.dataSets.size}>No Data</div>
                 <div class="value-container">
                     ${repeat(
                         [...this.dataSets.entries()].sort(),
