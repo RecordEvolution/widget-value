@@ -31,7 +31,7 @@
                         "title": "Unit",
                         "description": "The unit of the value. e.g. °C or km/h",
                         "type": "string",
-                        "dataDrivenDisabled": true,
+                        "dataDrivenDisabled": false,
                         "order": 2
                     },
                     "precision": {
