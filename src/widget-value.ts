@@ -5,10 +5,16 @@ import { InputData } from './definition-schema.js'
 
 type Dataseries = Exclude<InputData['dataseries'], undefined>[number] & { needleValue?: number }
 type Data = Exclude<Dataseries['data'], undefined>[number]
-
+type Theme = {
+    theme_name: string
+    theme_object: any
+}
 export class WidgetValue extends LitElement {
     @property({ type: Object })
     inputData?: InputData
+
+    @property({ type: Object })
+    theme?: Theme
 
     @state()
     private dataSets: Map<string, Dataseries> = new Map()
@@ -16,11 +22,9 @@ export class WidgetValue extends LitElement {
     @state()
     private textActive: boolean = true
 
-    @state()
-    private numberText?: HTMLDivElement[]
-
-    @state()
-    private labelText?: HTMLDivElement[]
+    @state() private themeBgColor?: string
+    @state() private themeTitleColor?: string
+    @state() private themeSubtitleColor?: string
 
     version: string = 'versionplaceholder'
 
@@ -54,6 +58,15 @@ export class WidgetValue extends LitElement {
         if (changedProperties.has('inputData')) {
             this.sizingSetup()
             this.applyInputData()
+        }
+
+        if (changedProperties.has('theme')) {
+            const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
+            const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
+            this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
+            this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
+            this.themeSubtitleColor =
+                cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
         }
 
         super.update(changedProperties)
@@ -127,7 +140,8 @@ export class WidgetValue extends LitElement {
             const numberText = n.querySelector('.current-value') as HTMLDivElement
             numberText.setAttribute(
                 'style',
-                `font-size: ${32 * modifier}px; ${ds?.styling?.valueColor ? 'color: ' + ds?.styling?.valueColor : ''}`
+                `font-size: ${32 * modifier}px; 
+                ${ds?.styling?.valueColor ? 'color: ' + ds?.styling?.valueColor : ''}`
             )
         })
 
@@ -137,12 +151,14 @@ export class WidgetValue extends LitElement {
             const labelText = n.querySelector('.label') as HTMLDivElement
             labelText.setAttribute(
                 'style',
-                `font-size: ${26 * modifier}px; ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
+                `font-size: ${26 * modifier}px; 
+                ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
             )
             const unitText = n.querySelector('.unit') as HTMLDivElement
             unitText.setAttribute(
                 'style',
-                `font-size: ${26 * modifier}px; ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
+                `font-size: ${26 * modifier}px; 
+                ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
             )
         })
 
@@ -231,7 +247,6 @@ export class WidgetValue extends LitElement {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: var(--re-text-color, #000) !important;
         }
         p {
             margin: 10px 0 0 0;
@@ -241,7 +256,6 @@ export class WidgetValue extends LitElement {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: var(--re-text-color, #000) !important;
         }
 
         .value-container {
@@ -269,14 +283,12 @@ export class WidgetValue extends LitElement {
             font-size: 32px;
             font-weight: 600;
             white-space: nowrap;
-            color: var(--re-text-color, #000);
         }
 
         .label,
         .unit {
             font-weight: 300;
             font-size: 26px;
-            color: var(--re-text-color, #000);
             white-space: nowrap;
         }
 
@@ -295,7 +307,6 @@ export class WidgetValue extends LitElement {
 
         .no-data {
             font-size: 20px;
-            color: var(--re-text-color, #000);
             display: flex;
             height: 100%;
             width: 100%;
@@ -307,10 +318,19 @@ export class WidgetValue extends LitElement {
 
     render() {
         return html`
-            <div class="wrapper">
+            <div
+                class="wrapper"
+                style="background-color: ${this.themeBgColor}; color: ${this.themeTitleColor}"
+            >
                 <header>
                     <h3 class="paging" ?active=${this.inputData?.title}>${this.inputData?.title}</h3>
-                    <p class="paging" ?active=${this.inputData?.subTitle}>${this.inputData?.subTitle}</p>
+                    <p
+                        class="paging"
+                        ?active=${this.inputData?.subTitle}
+                        style="color: ${this.themeSubtitleColor}"
+                    >
+                        ${this.inputData?.subTitle}
+                    </p>
                 </header>
                 <div class="sizing-container">
                     ${repeat(
@@ -320,7 +340,11 @@ export class WidgetValue extends LitElement {
                             return html`
                                 <div class="single-value" label="${label}">
                                     <div class="label paging" ?active=${this.textActive}>${label}</div>
-                                    <span class="current-value paging" ?active=${this.textActive}>
+                                    <span
+                                        class="current-value paging"
+                                        ?active=${this.textActive}
+                                        style="color: ${this.themeTitleColor}"
+                                    >
                                         ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
                                             : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
@@ -340,7 +364,11 @@ export class WidgetValue extends LitElement {
                             return html`
                                 <div class="single-value" label="${label}">
                                     <div class="label paging" ?active=${this.textActive}>${label}</div>
-                                    <span class="current-value paging" ?active=${this.textActive}>
+                                    <span
+                                        class="current-value paging"
+                                        ?active=${this.textActive}
+                                        style="color: ${this.themeTitleColor}"
+                                    >
                                         ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
                                             ? ''
                                             : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
