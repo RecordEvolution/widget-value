@@ -50,6 +50,7 @@ export class WidgetValue extends LitElement {
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         this.valueContainer = this?.shadowRoot?.querySelector('.value-container') as HTMLDivElement
 
+        this.registerTheme(this.theme)
         this.sizingSetup()
         this.applyInputData()
     }
@@ -61,15 +62,19 @@ export class WidgetValue extends LitElement {
         }
 
         if (changedProperties.has('theme')) {
-            const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
-            const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
-            this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
-            this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
-            this.themeSubtitleColor =
-                cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+            this.registerTheme(this.theme)
         }
 
         super.update(changedProperties)
+    }
+
+    registerTheme(theme?: Theme) {
+        const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
+        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-background-color').trim()
+        this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
+        this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
+        this.themeSubtitleColor =
+            cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
     }
 
     sizingSetup() {
