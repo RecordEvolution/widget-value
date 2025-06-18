@@ -141,7 +141,7 @@ export class WidgetValue extends LitElement {
             numberText.setAttribute(
                 'style',
                 `font-size: ${32 * modifier}px; 
-                ${ds?.styling?.valueColor ? 'color: ' + ds?.styling?.valueColor : ''}`
+                color: ${ds?.styling?.valueColor || this.themeTitleColor};`
             )
         })
 
@@ -152,13 +152,13 @@ export class WidgetValue extends LitElement {
             labelText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
-                ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
+                color: ${ds?.styling?.labelColor || this.themeSubtitleColor};`
             )
             const unitText = n.querySelector('.unit') as HTMLDivElement
             unitText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
-                ${ds?.styling?.labelColor ? 'color: ' + ds?.styling?.labelColor : ''}`
+                color: ${ds?.styling?.labelColor || this.themeSubtitleColor};`
             )
         })
 
