@@ -3,7 +3,7 @@
     "description": "REWidget widget-value",
     "license": "MIT",
     "author": "widget-value",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "engines": {
         "node": "18.18.2",
         "npm": ">=10.0.2"
