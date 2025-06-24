@@ -36,7 +36,7 @@ export class WidgetValue extends LitElement {
     origHeight: number = 0
     constructor() {
         super()
-        this.resizeObserver = new ResizeObserver(this.adjustSizes.bind(this))
+        this.resizeObserver = new ResizeObserver(this.applyData.bind(this))
         this.resizeObserver.observe(this)
     }
 
@@ -52,13 +52,15 @@ export class WidgetValue extends LitElement {
 
         this.registerTheme(this.theme)
         this.sizingSetup()
-        this.applyInputData()
+        this.transformData()
+        this.applyData()
     }
 
     update(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
             this.sizingSetup()
-            this.applyInputData()
+            this.transformData()
+            this.applyData()
         }
 
         if (changedProperties.has('theme')) {
@@ -90,11 +92,9 @@ export class WidgetValue extends LitElement {
             boxes?.map((b) => b.getBoundingClientRect().width).reduce((p, c) => (c > p ? c : p), 0) ?? 0
         this.origHeight =
             boxes?.map((b) => b.getBoundingClientRect().height).reduce((p, c) => (c > p ? c : p), 0) ?? 0
-
-        this.adjustSizes()
     }
 
-    adjustSizes() {
+    applyData() {
         const userWidth = this.valueContainer?.getBoundingClientRect().width
         const userHeight = this.valueContainer?.getBoundingClientRect().height
         const count = this.dataSets.size
@@ -146,7 +146,7 @@ export class WidgetValue extends LitElement {
             numberText.setAttribute(
                 'style',
                 `font-size: ${32 * modifier}px; 
-                color: ${ds?.styling?.valueColor || this.themeTitleColor};`
+                color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
             )
         })
 
@@ -157,20 +157,20 @@ export class WidgetValue extends LitElement {
             labelText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
-                color: ${ds?.styling?.labelColor || this.themeSubtitleColor};`
+                color: ${ds?.styling?.labelColor || this.theme?.theme_object?.color?.[1] || this.themeSubtitleColor};`
             )
             const unitText = n.querySelector('.unit') as HTMLDivElement
             unitText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
-                color: ${ds?.styling?.labelColor || this.themeSubtitleColor};`
+                color: ${ds?.styling?.labelColor || this.theme?.theme_object?.color?.[1] || this.themeSubtitleColor};`
             )
         })
 
         this.textActive = true
     }
 
-    async applyInputData() {
+    async transformData() {
         if (!this.inputData) return
         this.dataSets.forEach((d) => {
             d.label ??= ''
@@ -220,7 +220,6 @@ export class WidgetValue extends LitElement {
 
         this.requestUpdate()
         await this.updateComplete
-        this.adjustSizes()
         // console.log('Value Datasets', this.dataSets)
     }
 

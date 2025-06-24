@@ -4,10 +4,7 @@
             "label": "Temperature",
             "unit": "°C",
             "precision": 2,
-            "styling": {
-                "labelColor": "#ff9b9b",
-                "valueColor": "#e15656"
-            },
+            "styling": {},
             "advanced": {
                 "averageLatest": 1
             },
@@ -20,10 +17,7 @@
         {
             "label": "Pressure",
             "unit": "Pa",
-            "styling": {
-                "labelColor": "#96caf8",
-                "valueColor": "#5898d0"
-            },
+            "styling": {},
             "advanced": {
                 "averageLatest": 1
             },
