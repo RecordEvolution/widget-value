@@ -163,7 +163,7 @@ export class WidgetValue extends LitElement {
             unitText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
-                color: ${ds?.styling?.labelColor || this.theme?.theme_object?.color?.[1] || this.themeSubtitleColor};`
+                color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
             )
         })
 
