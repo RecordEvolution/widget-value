@@ -183,9 +183,10 @@ export class WidgetValue extends LitElement {
                 const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))].sort() as string[]
                 ds.needleValue = undefined
                 distincts.forEach((piv) => {
-                    const prefix = piv ? `${piv} - ` : ''
+                    const prefix = piv ?? ''
+                    const label = ds.label ?? ''
                     const pds: Dataseries = {
-                        label: prefix + ds.label,
+                        label: prefix + (!!prefix && !!label ? ' - ' : '') + label,
                         order: ds.order,
                         unit: ds.unit,
                         precision: ds.precision,
