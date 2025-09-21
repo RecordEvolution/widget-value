@@ -13,7 +13,8 @@
     "types": "dist/src/widget-value.d.ts",
     "files": [
         "dist",
-        "src"
+        "src",
+        "thumbnail.png"
     ],
     "scripts": {
         "analyze": "cem analyze --litelement",
