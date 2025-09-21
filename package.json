@@ -24,7 +24,7 @@
         "unlink": "npm unlink --global && cd ../RESWARM/frontend && npm unlink @record-evolution/widget-value && npm i @record-evolution/widget-value",
         "types": "cat src/definition-schema.json | json2ts > src/definition-schema.d.ts",
         "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
-        "release": "npm run build && npm run types && npm version patch --tag-version-prefix='' && git push && git push --tag"
+        "release": "npm run build && npm run types && npm version patch --tag-version-prefix='' && git push && git push --tag && npm run build"
     },
     "dependencies": {
         "lit": "^3.3.0"
