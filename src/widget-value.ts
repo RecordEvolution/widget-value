@@ -1,6 +1,6 @@
 import { html, css, LitElement, PropertyValueMap } from 'lit'
 import { repeat } from 'lit/directives/repeat.js'
-import { property, state } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { InputData } from './definition-schema.js'
 
 type Dataseries = Exclude<InputData['dataseries'], undefined>[number] & { needleValue?: number }
@@ -9,6 +9,8 @@ type Theme = {
     theme_name: string
     theme_object: any
 }
+
+@customElement('widget-value-versionplaceholder')
 export class WidgetValue extends LitElement {
     @property({ type: Object })
     inputData?: InputData
@@ -80,8 +82,6 @@ export class WidgetValue extends LitElement {
     }
 
     sizingSetup() {
-        if (this.origWidth !== 0 && this.origHeight !== 0) return
-
         const boxes = Array.from(
             this?.shadowRoot?.querySelectorAll(
                 '.sizing-container > .single-value'
@@ -388,5 +388,3 @@ export class WidgetValue extends LitElement {
         `
     }
 }
-
-window.customElements.define('widget-value-versionplaceholder', WidgetValue)
