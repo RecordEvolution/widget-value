@@ -192,6 +192,8 @@ export class WidgetValue extends LitElement {
                         precision: ds.precision,
                         advanced: ds.advanced,
                         styling: ds.styling,
+                        multiChart: ds.multiChart,
+                        value: ds.value,
                         data: distincts.length === 1 ? ds.data : ds.data?.filter((d) => d.pivot === piv),
                         needleValue: undefined
                     }
@@ -205,18 +207,19 @@ export class WidgetValue extends LitElement {
             if (typeof ds.advanced?.averageLatest !== 'number' || !isNaN(ds.advanced?.averageLatest))
                 ds.advanced.averageLatest = 1
 
-            const data = ds?.data?.slice(-ds?.advanced?.averageLatest || -1) ?? []
-            const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
-            const average = values.reduce((p, c) => p + c, 0) / values.length
-
-            // Check age of data Latency
-            const tsp = Date.parse(data?.[0]?.tsp ?? '')
-            if (isNaN(tsp)) {
-                const now = new Date().getTime()
-                if (now - tsp > (ds.advanced?.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
+            if (!ds.multiChart) {
+                ds.needleValue = ds.value
+            } else {
+                const data = ds?.data?.slice(-ds?.advanced?.averageLatest || -1) ?? []
+                const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
+                ds.needleValue = values.reduce((p, c) => p + c, 0) / values.length
+                // Check age of data Latency
+                const tsp = Date.parse(data?.[0]?.tsp ?? '')
+                if (isNaN(tsp)) {
+                    const now = new Date().getTime()
+                    if (now - tsp > (ds.advanced?.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
+                }
             }
-
-            ds.needleValue = average
         })
 
         this.requestUpdate()

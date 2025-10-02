@@ -18,20 +18,20 @@ export type Unit = string;
 /**
  * Number of digits after the decimal point. (Default 0)
  */
-export type Precision = number;
+export type Decimals = number;
 /**
- * Calculate the average over the given number of newest values. (If you use "Split data by", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
+ * The value of the gauge
  */
-export type AverageLatestValues = number;
+export type Value = number;
 /**
- * If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.
+ * Draw multiple Charts based on the split column of a data table.
  */
-export type MaximumLatency = number;
+export type MultiChart = boolean;
 /**
  * This should be an ISO String date like 2023-11-04T22:47:52.351152+00:00. Will only be used to detect data age of data.
  */
 export type Timestamp = string;
-export type Value = number;
+export type Value1 = number;
 /**
  * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as split column, then you will get a value field for each city.
  */
@@ -41,17 +41,27 @@ export type SplitDataBy = string;
  */
 export type Data = {
   tsp?: Timestamp;
-  value?: Value;
+  value?: Value1;
   pivot?: SplitDataBy;
   [k: string]: unknown;
 }[];
+/**
+ * Calculate the average over the given number of newest values. (If you use "Split data by", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
+ */
+export type AverageLatestValues = number;
+/**
+ * If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.
+ */
+export type MaximumLatency = number;
 export type ValueDisplays = {
   label?: Label;
   unit?: Unit;
-  precision?: Precision;
+  precision?: Decimals;
+  value?: Value;
+  multiChart?: MultiChart;
+  data?: Data;
   styling?: Styling;
   advanced?: AdvancedSettings;
-  data?: Data;
   [k: string]: unknown;
 }[];
 

@@ -28,7 +28,7 @@
         "release": "npm run build && npm run types && npm version patch --tag-version-prefix='' && git push && git push --tag && npm run build"
     },
     "dependencies": {
-        "lit": "^3.3.0"
+        "lit": "^3.3.1"
     },
     "devDependencies": {
         "@custom-elements-manifest/analyzer": "^0.10.4",
