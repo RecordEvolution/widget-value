@@ -4,28 +4,12 @@
             "label": "Temperature",
             "unit": "°C",
             "precision": 2,
-            "styling": {},
-            "advanced": {
-                "averageLatest": 1
-            },
-            "data": [
-                {
-                    "value": 90
-                }
-            ]
+            "value": 90
         },
         {
             "label": "Pressure",
             "unit": "Pa",
-            "styling": {},
-            "advanced": {
-                "averageLatest": 1
-            },
-            "data": [
-                {
-                    "value": 80
-                }
-            ]
+            "value": 80
         }
     ]
 }

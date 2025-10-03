@@ -1,6 +1,6 @@
-import { html, css, LitElement, PropertyValueMap } from 'lit'
+import { html, css, LitElement, PropertyValueMap, PropertyValues } from 'lit'
 import { repeat } from 'lit/directives/repeat.js'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property, query, state } from 'lit/decorators.js'
 import { InputData } from './definition-schema.js'
 
 type Dataseries = Exclude<InputData['dataseries'], undefined>[number] & { needleValue?: number }
@@ -28,14 +28,19 @@ export class WidgetValue extends LitElement {
     @state() private themeTitleColor?: string
     @state() private themeSubtitleColor?: string
 
+    @query('.value-container')
+    valueContainer?: HTMLDivElement
+
+    @query('.sizing-container')
+    sizingContainer?: HTMLDivElement
+
     version: string = 'versionplaceholder'
 
     private resizeObserver: ResizeObserver
+    private lastLargerWidthTime?: number
+    private origWidth: number = 0
+    private origHeight: number = 0
 
-    valueContainer?: HTMLDivElement
-    boxes?: HTMLDivElement[]
-    origWidth: number = 0
-    origHeight: number = 0
     constructor() {
         super()
         this.resizeObserver = new ResizeObserver(this.applyData.bind(this))
@@ -50,18 +55,19 @@ export class WidgetValue extends LitElement {
     }
 
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-        this.valueContainer = this?.shadowRoot?.querySelector('.value-container') as HTMLDivElement
-
         this.registerTheme(this.theme)
-        this.sizingSetup()
-        this.transformData()
-        this.applyData()
     }
 
-    update(changedProperties: Map<string, any>) {
+    protected update(changedProperties: PropertyValues): void {
+        if (changedProperties.has('inputData')) {
+            this.transformData()
+        }
+        super.update(changedProperties)
+    }
+
+    protected updated(changedProperties: Map<string, any>) {
         if (changedProperties.has('inputData')) {
             this.sizingSetup()
-            this.transformData()
             this.applyData()
         }
 
@@ -69,7 +75,7 @@ export class WidgetValue extends LitElement {
             this.registerTheme(this.theme)
         }
 
-        super.update(changedProperties)
+        super.updated(changedProperties)
     }
 
     registerTheme(theme?: Theme) {
@@ -83,20 +89,32 @@ export class WidgetValue extends LitElement {
 
     sizingSetup() {
         const boxes = Array.from(
-            this?.shadowRoot?.querySelectorAll(
-                '.sizing-container > .single-value'
-            ) as NodeListOf<HTMLDivElement>
+            this.sizingContainer?.querySelectorAll('.single-value') as NodeListOf<HTMLDivElement>
         )
 
-        this.origWidth =
-            boxes?.map((b) => b.getBoundingClientRect().width).reduce((p, c) => (c > p ? c : p), 0) ?? 0
-        this.origHeight =
-            boxes?.map((b) => b.getBoundingClientRect().height).reduce((p, c) => (c > p ? c : p), 0) ?? 0
+        let width = 0
+        let height = 0
+        for (const box of boxes) {
+            const dims = box.getBoundingClientRect()
+            width = Math.max(dims.width, width)
+            height = Math.max(dims.height, height)
+        }
+
+        if (width < this.origWidth) {
+            if (!this.lastLargerWidthTime || Date.now() - this.lastLargerWidthTime > 5000) {
+                this.origWidth = width
+            }
+        } else {
+            this.origWidth = width
+            this.lastLargerWidthTime = Date.now()
+        }
+        this.origHeight = height
     }
 
     applyData() {
-        const userWidth = this.valueContainer?.getBoundingClientRect().width
-        const userHeight = this.valueContainer?.getBoundingClientRect().height
+        if (!this.valueContainer) return
+        const userWidth = this.valueContainer.getBoundingClientRect().width
+        const userHeight = this.valueContainer.getBoundingClientRect().height
         const count = this.dataSets.size
 
         const width = this.origWidth
@@ -110,7 +128,7 @@ export class WidgetValue extends LitElement {
             const uhgap = userHeight - 12 * (r - 1)
             const m = uwgap / width / c
             const size = m * m * width * height * count
-            if (r * m * height <= uhgap) fits.push({ c, m, size, width, height, userWidth, userHeight })
+            if (r * m * height <= uhgap) fits.push({ r, c, m, size, width, height, userWidth, userHeight })
         }
 
         for (let r = 1; r <= count; r++) {
@@ -119,53 +137,47 @@ export class WidgetValue extends LitElement {
             const uhgap = userHeight - 12 * (r - 1)
             const m = uhgap / height / r
             const size = m * m * width * height * count
-            if (c * m * width <= uwgap) fits.push({ r, m, size, width, height, userWidth, userHeight })
+            if (c * m * width <= uwgap) fits.push({ r, c, m, size, width, height, userWidth, userHeight })
         }
         const maxSize = fits.reduce((p, c) => (c.size < p ? p : c.size), 0)
         const fit = fits.find((f) => f.size === maxSize)
-        const modifier = fit?.m ?? 1
+        if (!fit) return
+        const modifier = fit.m ?? 1
         // console.log('FITS', fits, 'modifier', modifier, 'cols',fit?.c, 'rows', fit?.r, 'new size', fit?.size.toFixed(0), 'total space', (userWidth* userHeight).toFixed(0))
-
         const boxes = Array.from(
-            this?.shadowRoot?.querySelectorAll(
-                '.value-container > .single-value'
-            ) as NodeListOf<HTMLDivElement>
+            this.valueContainer?.querySelectorAll('.single-value') as NodeListOf<HTMLDivElement>
         )
+        this.valueContainer.style.gridTemplateColumns = `repeat(${fit.c}, 1fr)`
 
-        boxes?.forEach((box) =>
+        for (const box of boxes) {
             box.setAttribute(
                 'style',
                 `width:${modifier * width}px; height:${modifier * height}px; padding:${modifier * 6}px`
             )
-        )
 
-        boxes?.forEach((n) => {
-            const label: string | null = n.getAttribute('label')
+            const label: string | null = box.getAttribute('label')
             const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-            const numberText = n.querySelector('.current-value') as HTMLDivElement
+
+            const numberText = box.querySelector('.current-value') as HTMLDivElement
             numberText.setAttribute(
                 'style',
                 `font-size: ${32 * modifier}px; 
                 color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
             )
-        })
 
-        boxes?.forEach((n) => {
-            const label: string | null = n.getAttribute('label')
-            const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
-            const labelText = n.querySelector('.label') as HTMLDivElement
+            const labelText = box.querySelector('.label') as HTMLDivElement
             labelText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
                 color: ${ds?.styling?.labelColor || this.theme?.theme_object?.color?.[1] || this.themeSubtitleColor};`
             )
-            const unitText = n.querySelector('.unit') as HTMLDivElement
+            const unitText = box.querySelector('.unit') as HTMLDivElement
             unitText.setAttribute(
                 'style',
                 `font-size: ${26 * modifier}px; 
                 color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
             )
-        })
+        }
 
         this.textActive = true
     }
@@ -180,8 +192,10 @@ export class WidgetValue extends LitElement {
             // ?.sort((a, b) => a.order - b.order)
             ?.forEach((ds) => {
                 // pivot data
-                const distincts = [...new Set(ds.data?.map((d: Data) => d.pivot))].sort() as string[]
-                ds.needleValue = undefined
+                const distincts = ds.multiChart
+                    ? ([...new Set(ds.data?.map((d: Data) => d.pivot))].sort() as string[])
+                    : ['']
+
                 distincts.forEach((piv) => {
                     const prefix = piv ?? ''
                     const label = ds.label ?? ''
@@ -221,10 +235,6 @@ export class WidgetValue extends LitElement {
                 }
             }
         })
-
-        this.requestUpdate()
-        await this.updateComplete
-        // console.log('Value Datasets', this.dataSets)
     }
 
     static styles = css`
@@ -267,10 +277,7 @@ export class WidgetValue extends LitElement {
         }
 
         .value-container {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
+            display: grid;
             line-height: 0.9;
             flex: 1;
             overflow: hidden;
@@ -284,7 +291,6 @@ export class WidgetValue extends LitElement {
             align-items: end;
             padding: 6px;
             box-sizing: border-box;
-            /* border-left: 4px solid #ddd; */
         }
 
         .current-value {
@@ -302,13 +308,8 @@ export class WidgetValue extends LitElement {
 
         .sizing-container {
             position: absolute;
-            left: 10000px;
-            display: flex;
+            left: 100000px;
             line-height: 0.9;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
             overflow: hidden;
             gap: 12px;
         }
