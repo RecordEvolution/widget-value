@@ -354,7 +354,9 @@ export class WidgetValue extends LitElement {
                                         ?active=${this.textActive}
                                         style="color: ${this.themeTitleColor}"
                                     >
-                                        ${isNaN(ds.needleValue ?? 0) || ds.needleValue === undefined
+                                        ${ds.needleValue === undefined ||
+                                        ds.needleValue === null ||
+                                        isNaN(ds.needleValue)
                                             ? ''
                                             : ds.needleValue.toFixed(Math.max(0, ds.precision ?? 0))}
                                         <span class="unit paging" ?active=${this.textActive}>${ds.unit}</span>
