@@ -158,6 +158,12 @@ export class WidgetValue extends LitElement {
             const label: string | null = box.getAttribute('label')
             const ds: Dataseries | undefined = this.dataSets.get(label ?? '')
 
+            const labelText = box.querySelector('.label') as HTMLDivElement
+            labelText.setAttribute(
+                'style',
+                `font-size: ${26 * modifier}px; 
+                color: ${ds?.styling?.labelColor || this.themeTitleColor};`
+            )
             const numberText = box.querySelector('.current-value') as HTMLDivElement
             numberText.setAttribute(
                 'style',
@@ -165,18 +171,8 @@ export class WidgetValue extends LitElement {
                 color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
             )
 
-            const labelText = box.querySelector('.label') as HTMLDivElement
-            labelText.setAttribute(
-                'style',
-                `font-size: ${26 * modifier}px; 
-                color: ${ds?.styling?.labelColor || this.theme?.theme_object?.color?.[1] || this.themeSubtitleColor};`
-            )
             const unitText = box.querySelector('.unit') as HTMLDivElement
-            unitText.setAttribute(
-                'style',
-                `font-size: ${26 * modifier}px; 
-                color: ${ds?.styling?.valueColor || this.theme?.theme_object?.color?.[0] || this.themeTitleColor};`
-            )
+            unitText.setAttribute('style', `font-size: ${26 * modifier}px;`)
         }
 
         this.textActive = true
@@ -352,7 +348,9 @@ export class WidgetValue extends LitElement {
                                     <span
                                         class="current-value paging"
                                         ?active=${this.textActive}
-                                        style="color: ${this.themeTitleColor}"
+                                        style="color: ${ds?.styling?.valueColor ||
+                                        this.theme?.theme_object?.color?.[0] ||
+                                        this.themeTitleColor}"
                                     >
                                         ${ds.needleValue === undefined ||
                                         ds.needleValue === null ||
@@ -374,11 +372,19 @@ export class WidgetValue extends LitElement {
                         ([label, ds]) => {
                             return html`
                                 <div class="single-value" label="${label}">
-                                    <div class="label paging" ?active=${this.textActive}>${label}</div>
+                                    <div
+                                        class="label paging"
+                                        style="color: ${ds?.styling?.labelColor || this.themeTitleColor}"
+                                        ?active=${this.textActive}
+                                    >
+                                        ${label}
+                                    </div>
                                     <span
                                         class="current-value paging"
                                         ?active=${this.textActive}
-                                        style="color: ${this.themeTitleColor}"
+                                        style="color: ${ds?.styling?.valueColor ||
+                                        this.theme?.theme_object?.color?.[0] ||
+                                        this.themeTitleColor}"
                                     >
                                         ${ds.needleValue === undefined ||
                                         ds.needleValue === null ||
