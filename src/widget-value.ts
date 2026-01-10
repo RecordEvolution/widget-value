@@ -240,6 +240,8 @@ export class WidgetValue extends LitElement {
             box-sizing: border-box;
             position: relative;
             margin: auto;
+            overflow: hidden;
+            container-type: size;
         }
 
         .paging:not([active]) {
@@ -251,7 +253,7 @@ export class WidgetValue extends LitElement {
             flex-direction: column;
             height: 100%;
             width: 100%;
-            padding: 16px;
+            padding: 2cqh 2cqw;
             box-sizing: border-box;
         }
 

@@ -40,10 +40,10 @@ export type SplitDataBy = string;
  * The data used to draw this data series.
  */
 export type Data = {
-  tsp?: Timestamp;
-  value?: Value1;
-  pivot?: SplitDataBy;
-  [k: string]: unknown;
+    tsp?: Timestamp;
+    value?: Value1;
+    pivot?: SplitDataBy;
+    [k: string]: unknown;
 }[];
 /**
  * Calculate the average over the given number of newest values. (If you use "Split data by", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
@@ -54,36 +54,36 @@ export type AverageLatestValues = number;
  */
 export type MaximumLatency = number;
 export type ValueDisplays = {
-  label?: Label;
-  unit?: Unit;
-  precision?: Decimals;
-  value?: Value;
-  multiChart?: MultiChart;
-  data?: Data;
-  styling?: Styling;
-  advanced?: AdvancedSettings;
-  [k: string]: unknown;
+    label?: Label;
+    unit?: Unit;
+    precision?: Decimals;
+    value?: Value;
+    multiChart?: MultiChart;
+    data?: Data;
+    styling?: Styling;
+    advanced?: AdvancedSettings;
+    [k: string]: unknown;
 }[];
 
 export interface InputData {
-  title?: Title;
-  subTitle?: Subtitle;
-  dataseries?: ValueDisplays;
-  [k: string]: unknown;
+    title?: Title;
+    subTitle?: Subtitle;
+    dataseries?: ValueDisplays;
+    [k: string]: unknown;
 }
 export interface Styling {
-  labelColor?: LabelColor;
-  valueColor?: ValueColor;
-  [k: string]: unknown;
+    labelColor?: LabelColor;
+    valueColor?: ValueColor;
+    [k: string]: unknown;
 }
 export interface LabelColor {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 export interface ValueColor {
-  [k: string]: unknown;
+    [k: string]: unknown;
 }
 export interface AdvancedSettings {
-  averageLatest?: AverageLatestValues;
-  maxLatency?: MaximumLatency;
-  [k: string]: unknown;
+    averageLatest?: AverageLatestValues;
+    maxLatency?: MaximumLatency;
+    [k: string]: unknown;
 }
