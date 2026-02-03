@@ -5,39 +5,48 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+/**
+ * The main heading displayed above the value displays. Use to identify the metric group (e.g., 'Temperature Readings', 'Production Counts').
+ */
 export type Title = string;
+/**
+ * Secondary text displayed below the title. Use for additional context like location, time period, or data source.
+ */
 export type Subtitle = string;
 /**
- * The label for the value.
+ * Display text identifying this value. Should clearly describe what the number represents (e.g., 'Current Temperature', 'Total Orders', 'CPU Usage').
  */
 export type Label = string;
 /**
- * The unit of the value. e.g. °C or km/h
+ * The measurement unit displayed after the value. Examples: '°C', 'km/h', '%', 'kWh', 'pcs'. Can be bound to data for dynamic units.
  */
 export type Unit = string;
 /**
- * Number of digits after the decimal point. (Default 0)
+ * Number of decimal places to display. Default is 0 (whole numbers). Set to 1-3 for measurements requiring decimal precision (e.g., temperature: 2, percentages: 1).
  */
 export type Decimals = number;
 /**
- * The value of the gauge
+ * The numeric value to display. Bind to a data source column containing the metric. Only shown when Multi Chart mode is disabled.
  */
 export type Value = number;
 /**
- * Draw multiple Charts based on the split column of a data table.
+ * Enable to automatically create one value display per distinct pivot value in the data. When enabled, use the data array with pivot column instead of a single value.
  */
 export type MultiChart = boolean;
 /**
- * This should be an ISO String date like 2023-11-04T22:47:52.351152+00:00. Will only be used to detect data age of data.
+ * ISO 8601 timestamp string (e.g., '2023-11-04T22:47:52.351152+00:00'). Used with Maximum Latency setting to validate data freshness - stale data can be hidden or marked.
  */
 export type Timestamp = string;
+/**
+ * The numeric value from this data row. In Multi Chart mode, the latest value per pivot group is displayed.
+ */
 export type Value1 = number;
 /**
- * You can specify a column in the input data to autogenerate dataseries for each distinct entry in this column. E.g. if you have a table with columns [city, timestamp, temperature] and specify 'city' as split column, then you will get a value field for each city.
+ * Column used to group data into separate value displays. Each unique value creates its own display. Example: with columns [city, timestamp, temperature], setting pivot to 'city' shows one temperature value per city.
  */
 export type SplitDataBy = string;
 /**
- * The data used to draw this data series.
+ * Data array for Multi Chart mode. Each row should contain a value and optionally a timestamp and pivot column for splitting into multiple displays.
  */
 export type Data = {
     tsp?: Timestamp;
@@ -46,13 +55,16 @@ export type Data = {
     [k: string]: unknown;
 }[];
 /**
- * Calculate the average over the given number of newest values. (If you use "Split data by", then per each of the pivot dataseries.) If not specified then the latest value is shown without modification.
+ * Calculate and display the average of the N most recent values instead of just the latest. Useful for smoothing noisy sensor data. Leave empty to show the raw latest value. When using pivot/split, averaging is applied per group.
  */
 export type AverageLatestValues = number;
 /**
- * If you provide timestamp data, the delivered value is only shown in the gauge when the age of the data is not older than the given maximum Latency in seconds.
+ * Maximum acceptable age of data in seconds. If the timestamp indicates data older than this threshold, the value may be hidden or marked as stale. Requires timestamp data to be provided. Useful for real-time monitoring where outdated values are misleading.
  */
 export type MaximumLatency = number;
+/**
+ * Array of value display configurations. Each entry creates a labeled numeric display with optional unit and styling. Add multiple entries to show several related metrics together.
+ */
 export type ValueDisplays = {
     label?: Label;
     unit?: Unit;
@@ -65,23 +77,38 @@ export type ValueDisplays = {
     [k: string]: unknown;
 }[];
 
+/**
+ * A simple numeric value display widget for showing key metrics with labels and units. Use this widget to prominently display important numbers like sensor readings, KPIs, counts, or any scalar values. Supports multiple value displays in one widget, each with its own label, unit, and formatting. Features include decimal precision control, data freshness validation via timestamps, averaging over recent values, and automatic pivot/split functionality for showing one value per distinct category. Ideal for dashboard KPI tiles, sensor readouts, counters, or any scenario requiring clean numeric value presentation.
+ */
 export interface InputData {
     title?: Title;
     subTitle?: Subtitle;
     dataseries?: ValueDisplays;
     [k: string]: unknown;
 }
+/**
+ * Visual styling options for the label and value text colors.
+ */
 export interface Styling {
     labelColor?: LabelColor;
     valueColor?: ValueColor;
     [k: string]: unknown;
 }
+/**
+ * Color of the label text above or beside the value.
+ */
 export interface LabelColor {
     [k: string]: unknown;
 }
+/**
+ * Color of the numeric value and unit text.
+ */
 export interface ValueColor {
     [k: string]: unknown;
 }
+/**
+ * Advanced data processing options for averaging and freshness validation.
+ */
 export interface AdvancedSettings {
     averageLatest?: AverageLatestValues;
     maxLatency?: MaximumLatency;
