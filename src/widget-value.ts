@@ -218,10 +218,14 @@ export class WidgetValue extends LitElement {
                 ds.advanced.averageLatest = 1
 
             if (!ds.multiChart) {
-                ds.needleValue = ds.value
+                ds.needleValue =
+                    ds.value === undefined || ds.value === null ? undefined : Number(ds.value)
             } else {
                 const data = ds?.data?.slice(-ds?.advanced?.averageLatest || -1) ?? []
-                const values = (data?.map((d) => d.value)?.filter((p) => p !== undefined) ?? []) as number[]
+                const values = (data
+                    ?.map((d) => d.value)
+                    ?.filter((p) => p !== undefined)
+                    ?.map(Number) ?? []) as number[]
                 ds.needleValue = values.reduce((p, c) => p + c, 0) / values.length
                 // Check age of data Latency
                 const tsp = Date.parse(data?.[0]?.tsp ?? '')
