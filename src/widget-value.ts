@@ -1,9 +1,9 @@
 import { html, css, LitElement, PropertyValueMap, PropertyValues } from 'lit'
 import { repeat } from 'lit/directives/repeat.js'
 import { customElement, property, query, state } from 'lit/decorators.js'
-import { InputData } from './definition-schema.js'
+import { ValueDisplayConfiguration } from './definition-schema.js'
 
-type Dataseries = Exclude<InputData['dataseries'], undefined>[number] & { needleValue?: number }
+type Dataseries = Exclude<ValueDisplayConfiguration['dataseries'], undefined>[number] & { needleValue?: number }
 type Data = Exclude<Dataseries['data'], undefined>[number]
 type Theme = {
     theme_name: string
@@ -13,7 +13,7 @@ type Theme = {
 @customElement('widget-value-versionplaceholder')
 export class WidgetValue extends LitElement {
     @property({ type: Object })
-    inputData?: InputData
+    inputData?: ValueDisplayConfiguration
 
     @property({ type: Object })
     theme?: Theme

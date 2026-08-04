@@ -23,7 +23,7 @@ This is a single-file LitElement web component published as `@record-evolution/w
 **Entry point:** `src/widget-value.ts` defines `<widget-value-versionplaceholder>`. The literal string `versionplaceholder` is rewritten at build time by `@rollup/plugin-replace` (configured in `vite.config.ts`) to the current `package.json` version, so each published version registers a uniquely versioned custom-element tag (e.g. `widget-value-1.1.25`). Consumers pick a version by importing it and using the matching tag — multiple versions can coexist on one page. The `demo/index.html` builds the tag dynamically via `unsafeStatic` from `package.json`.
 
 **Platform integration:** the host platform passes two reactive `@property({ type: Object })` inputs:
-- `inputData: InputData` — shape declared in `src/definition-schema.json` and code-generated to `src/definition-schema.d.ts` via `npm run types`. The JSON schema is the source of truth; descriptions inside it drive the platform's config UI and AI agent tooling. `dataDrivenDisabled` and `condition` keys in the schema control which fields the platform exposes for data-binding vs static config.
+- `inputData: ValueDisplayConfiguration` — shape declared in `src/definition-schema.json` and code-generated to `src/definition-schema.d.ts` via `npm run types`. The JSON schema is the source of truth; descriptions inside it drive the platform's config UI and AI agent tooling. `dataDrivenDisabled` and `condition` keys in the schema control which fields the platform exposes for data-binding vs static config.
 - `theme: { theme_name, theme_object }` — sample themes in `demo/themes/`. The component also reads CSS custom properties `--re-text-color` and `--re-tile-background-color` from its host context (these win over `theme_object`). See `registerTheme()`.
 
 **Data flow inside the widget:**
@@ -36,3 +36,25 @@ This is a single-file LitElement web component published as `@record-evolution/w
 ## Schema editing workflow
 
 When changing widget configuration: edit `src/definition-schema.json`, run `npm run types`, and update consumers in `widget-value.ts`. Descriptions in the JSON schema are user/agent-facing and intentionally verbose — preserve that style.
+
+## `aiSelection` in `src/definition-schema.json`
+
+The schema root carries an `aiSelection` block next to `title` and `description`. It is **not** JSON Schema and describes no config field — it exists so the IronFlock AI's Widget Builder can pick the right widget for a given shape of data, using knowledge only the widget author has:
+
+```jsonc
+"aiSelection": {
+  "dataShape": "…what columns this widget consumes and what each one means…",
+  "useWhen":   ["…a situation, naming the properties that express it…"],
+  "notFor":    ["…a situation this widget is wrong for, naming the widget to use instead…"]
+}
+```
+
+It is inert everywhere else, and must stay that way: `json2ts` ignores it (the generated `.d.ts` is byte-identical with and without it), the dashboard config editor renders only `schema.properties`, and the AI service's `validate_widget` validates *configs* against the schema, skipping unknown Draft-7 keywords.
+
+When maintaining it:
+
+- `notFor` is the high-value half and the part plain descriptions always omit. Every entry must name the widget that *should* be used, or it rejects without routing.
+- Write for an LLM with no other documentation: describe the visible result and the user's intent, not the implementation.
+- Prefer entries that discriminate against a *neighbouring* widget. Generic rejections are cheap; the ones that pay are those an author could plausibly get wrong.
+- The `notFor` lists are a set across all `widget-*` repos and are meant to be reciprocal — if this widget routes to another for some case, that widget should usually route back for the converse. Changing one side is a cue to check the other.
+- Update it whenever a property changes what this widget can *do*, not just how it looks.

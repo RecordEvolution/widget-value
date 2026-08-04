@@ -1,6 +1,22 @@
 {
-    "title": "InputData",
+    "title": "Value Display Configuration",
     "description": "A simple numeric value display widget for showing key metrics with labels and units. Use this widget to prominently display important numbers like sensor readings, KPIs, counts, or any scalar values. Supports multiple value displays in one widget, each with its own label, unit, and formatting. Features include decimal precision control, data freshness validation via timestamps, averaging over recent values, and automatic pivot/split functionality for showing one value per distinct category. Ideal for dashboard KPI tiles, sensor readouts, counters, or any scenario requiring clean numeric value presentation.",
+    "aiSelection": {
+        "dataShape": "One number per entry: dataseries[].data[].value, with an optional timestamp for freshness checks (advanced.maxLatency) and averaging over the latest N readings. Label, unit and decimal precision are set per entry. A pivot column produces one readout per distinct value.",
+        "useWhen": [
+            "A single current figure is the whole point — a count, a total, a latest reading, a KPI tile.",
+            "The number has a unit and a sensible precision and should be read exactly.",
+            "One tile per machine or site should be generated from a single column (data[].pivot).",
+            "Stale data should be visibly flagged rather than shown as current (advanced.maxLatency)."
+        ],
+        "notFor": [
+            "A number that only means something against a minimum and maximum — use widget-gauge.",
+            "How the number is changing — use widget-linechart.",
+            "Its share of a total — use widget-doughnut.",
+            "Several fields per entity that belong side by side — use widget-table.",
+            "Text rather than a figure — use widget-label."
+        ]
+    },
     "type": "object",
     "properties": {
         "title": {
