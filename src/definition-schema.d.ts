@@ -78,7 +78,7 @@ export type ValueDisplays = {
 }[];
 
 /**
- * A simple numeric value display widget for showing key metrics with labels and units. Use this widget to prominently display important numbers like sensor readings, KPIs, counts, or any scalar values. Supports multiple value displays in one widget, each with its own label, unit, and formatting. Features include decimal precision control, data freshness validation via timestamps, averaging over recent values, and automatic pivot/split functionality for showing one value per distinct category. Ideal for dashboard KPI tiles, sensor readouts, counters, or any scenario requiring clean numeric value presentation.
+ * A simple numeric value display widget for showing key metrics with labels and units. Use this widget to prominently display important numbers like sensor readings, KPIs, or any scalar value that already exists in the data — the widget performs NO aggregation (no count/sum/avg; the only reduction is averaging the latest N readings via advanced.averageLatest). Supports multiple value displays in one widget, each with its own label, unit, and formatting. Features include decimal precision control, data freshness validation via timestamps, averaging over recent values, and automatic pivot/split functionality for showing one value per distinct category. Ideal for dashboard KPI tiles, sensor readouts, or any scenario requiring clean numeric value presentation.
  */
 export interface ValueDisplayConfiguration {
     title?: Title;

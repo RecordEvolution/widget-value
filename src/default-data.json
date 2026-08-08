@@ -1,14 +1,14 @@
 {
     "dataseries": [
         {
-            "label": "Temperature",
-            "unit": "°C",
-            "precision": 2,
+            "label": "Metric A",
+            "unit": "",
+            "precision": 0,
             "value": 90
         },
         {
-            "label": "Pressure",
-            "unit": "Pa",
+            "label": "Metric B",
+            "unit": "",
             "value": 80
         }
     ]
