@@ -2,7 +2,7 @@
     "title": "Value Display Configuration",
     "description": "A simple numeric value display widget for showing key metrics with labels and units. Use this widget to prominently display important numbers like sensor readings, KPIs, or any scalar value that already exists in the data — the widget performs NO aggregation (no count/sum/avg; the only reduction is averaging the latest N readings via advanced.averageLatest). Supports multiple value displays in one widget, each with its own label, unit, and formatting. Features include decimal precision control, data freshness validation via timestamps, averaging over recent values, and automatic pivot/split functionality for showing one value per distinct category. Ideal for dashboard KPI tiles, sensor readouts, or any scenario requiring clean numeric value presentation.",
     "aiSelection": {
-        "dataShape": "One number per entry: dataseries[].data[].value, with an optional timestamp for freshness checks (advanced.maxLatency) and averaging over the latest N readings. Label, unit and decimal precision are set per entry. A pivot column produces one readout per distinct value.",
+        "dataShape": "One number per entry: dataseries[].data[].value, with an optional timestamp for freshness checks (advanced.maxLatency) and averaging over the latest N readings. Label, unit and decimal precision are set per entry. A pivot column produces one readout per distinct value. The subtitle can be bound as well, and shown as a local date and time when it holds a timestamp (subTitleType).",
         "useWhen": [
             "A single current figure is the whole point — a KPI tile showing a latest reading or an already-computed count/total that exists as a value in the data.",
             "The number has a unit and a sensible precision and should be read exactly.",
@@ -28,8 +28,16 @@
         },
         "subTitle": {
             "title": "Subtitle",
-            "description": "Secondary text displayed below the title. Use for additional context like location, time period, or data source.",
+            "description": "Secondary text displayed below the title. Use for additional context like location, time period, or data source. Can be bound to a timestamp column, e.g. to say since when a total has been counting; set Subtitle Type to 'timestamp' so it reads as a date and time rather than a raw number.",
             "type": "string",
+            "order": 2
+        },
+        "subTitleType": {
+            "title": "Subtitle Type",
+            "description": "How the subtitle is shown. 'text' (the default) shows it exactly as given. 'timestamp' reads it as a point in time — Unix epoch milliseconds, which is how a bound timestamp column arrives, or an ISO 8601 string — and shows it as a date and time in the viewer's own time zone and locale. A value that is not a point in time is shown as given.",
+            "type": "string",
+            "enum": ["text", "timestamp"],
+            "dataDrivenDisabled": true,
             "order": 2
         },
         "dataseries": {

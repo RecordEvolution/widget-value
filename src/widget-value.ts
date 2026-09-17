@@ -10,6 +10,24 @@ type Theme = {
     theme_object: any
 }
 
+// No locale and no time zone given: both are the viewer's own.
+const localDateTime = new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+})
+
+// A bound timestamp column arrives as epoch milliseconds; a string column or a
+// static subtitle may hold ISO 8601 instead. Anything else is not a point in
+// time and comes back undefined, so the caller can show it as given.
+const toDate = (value: unknown): Date | undefined => {
+    if (value === null || value === undefined || value === '') return undefined
+    const ms = /^\s*-?\d+(\.\d+)?\s*$/.test(String(value)) ? Number(value) : Date.parse(String(value))
+    return Number.isFinite(ms) ? new Date(ms) : undefined
+}
+
 @customElement('widget-value-versionplaceholder')
 export class WidgetValue extends LitElement {
     @property({ type: Object })
@@ -85,6 +103,13 @@ export class WidgetValue extends LitElement {
         this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
         this.themeSubtitleColor =
             cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+    }
+
+    subTitleText() {
+        const subTitle = this.inputData?.subTitle
+        if (this.inputData?.subTitleType !== 'timestamp') return subTitle
+        const date = toDate(subTitle)
+        return date ? localDateTime.format(date) : subTitle
     }
 
     sizingSetup() {
@@ -340,7 +365,7 @@ export class WidgetValue extends LitElement {
                         ?active=${this.inputData?.subTitle}
                         style="color: ${this.themeSubtitleColor}"
                     >
-                        ${this.inputData?.subTitle}
+                        ${this.subTitleText()}
                     </p>
                 </header>
                 <div class="sizing-container">

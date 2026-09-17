@@ -10,9 +10,13 @@
  */
 export type Title = string;
 /**
- * Secondary text displayed below the title. Use for additional context like location, time period, or data source.
+ * Secondary text displayed below the title. Use for additional context like location, time period, or data source. Can be bound to a timestamp column, e.g. to say since when a total has been counting; set Subtitle Type to 'timestamp' so it reads as a date and time rather than a raw number.
  */
 export type Subtitle = string;
+/**
+ * How the subtitle is shown. 'text' (the default) shows it exactly as given. 'timestamp' reads it as a point in time — Unix epoch milliseconds, which is how a bound timestamp column arrives, or an ISO 8601 string — and shows it as a date and time in the viewer's own time zone and locale. A value that is not a point in time is shown as given.
+ */
+export type SubtitleType = "text" | "timestamp";
 /**
  * Display text identifying this value. Should clearly describe what the number represents (e.g., 'Current Temperature', 'Total Orders', 'CPU Usage').
  */
@@ -83,6 +87,7 @@ export type ValueDisplays = {
 export interface ValueDisplayConfiguration {
     title?: Title;
     subTitle?: Subtitle;
+    subTitleType?: SubtitleType;
     dataseries?: ValueDisplays;
     [k: string]: unknown;
 }
