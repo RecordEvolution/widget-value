@@ -239,7 +239,11 @@ export class WidgetValue extends LitElement {
         // filter latest values and calculate average
         this.dataSets.forEach((ds, label) => {
             ds.advanced ??= {}
-            if (typeof ds.advanced?.averageLatest !== 'number' || !isNaN(ds.advanced?.averageLatest))
+            // Fall back to 1 only when the setting is missing or NaN. The
+            // inverted guard this replaces reset every VALID number to 1, so
+            // averageLatest never averaged anything (widget-gauge has the
+            // correct form).
+            if (typeof ds.advanced?.averageLatest !== 'number' || isNaN(ds.advanced?.averageLatest))
                 ds.advanced.averageLatest = 1
 
             if (!ds.multiChart) {
@@ -252,9 +256,10 @@ export class WidgetValue extends LitElement {
                     ?.filter((p) => p !== undefined)
                     ?.map(Number) ?? []) as number[]
                 ds.needleValue = values.reduce((p, c) => p + c, 0) / values.length
-                // Check age of data Latency
-                const tsp = Date.parse(data?.[0]?.tsp ?? '')
-                if (isNaN(tsp)) {
+                // Check age of data Latency. The newest row sits at the END of the
+                // data array (like the gauge); rows without a parseable tsp opt out.
+                const tsp = Date.parse(data?.[data.length - 1]?.tsp ?? '')
+                if (!isNaN(tsp)) {
                     const now = new Date().getTime()
                     if (now - tsp > (ds.advanced?.maxLatency ?? Infinity) * 1000) ds.needleValue = undefined
                 }
