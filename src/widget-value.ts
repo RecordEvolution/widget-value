@@ -97,12 +97,21 @@ export class WidgetValue extends LitElement {
     }
 
     registerTheme(theme?: Theme) {
-        const cssTextColor = getComputedStyle(this).getPropertyValue('--re-text-color').trim()
-        const cssBgColor = getComputedStyle(this).getPropertyValue('--re-tile-background-color').trim()
-        this.themeBgColor = cssBgColor || this.theme?.theme_object?.backgroundColor
-        this.themeTitleColor = cssTextColor || this.theme?.theme_object?.title?.textStyle?.color
-        this.themeSubtitleColor =
-            cssTextColor || this.theme?.theme_object?.title?.subtextStyle?.color || this.themeTitleColor
+        // The host's --re-tile-background-color / --re-text-color are not read
+        // through getComputedStyle here. That snapshots them, and this only runs
+        // on a `theme` property change, so a board style edit — which changes the
+        // custom property and nothing else — left the tile painting the previous
+        // colour until it was reloaded. What these fields hold is a var() chain
+        // with the theme's own colour as the fallback, so the host property keeps
+        // winning over the theme, and the browser resolves it on every repaint
+        // without the widget being told anything.
+        const themeBg = this.theme?.theme_object?.backgroundColor
+        const themeText = this.theme?.theme_object?.title?.textStyle?.color
+        const themeSubtext = this.theme?.theme_object?.title?.subtextStyle?.color || themeText
+
+        this.themeBgColor = `var(--re-tile-background-color, ${themeBg ?? 'transparent'})`
+        this.themeTitleColor = `var(--re-text-color, ${themeText ?? 'inherit'})`
+        this.themeSubtitleColor = `var(--re-text-color, ${themeSubtext ?? 'inherit'})`
     }
 
     subTitleText() {
